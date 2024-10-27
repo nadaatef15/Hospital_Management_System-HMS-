@@ -1,7 +1,7 @@
 ﻿using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Identity;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
-
+using static HMSContracts.Language.Resource;
 namespace HMSDataAccess.Reposatory.Account
 {
     public interface IAccountReposatory
@@ -21,11 +21,11 @@ namespace HMSDataAccess.Reposatory.Account
             var user = await userManager.FindByEmailAsync(Email);
 
             if (user is null)
-                throw new ConflictException("This Email does not excest");
+                throw new ConflictException(EmailNotFound);
 
             var result = await userManager.CheckPasswordAsync(user, password);
             if (!result)
-                throw new ConflictException("The password is not Correct");
+                throw new ConflictException(WrongPassword);
 
             return user;
         }

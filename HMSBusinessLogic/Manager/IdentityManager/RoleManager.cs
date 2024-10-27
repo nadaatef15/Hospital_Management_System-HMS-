@@ -2,6 +2,8 @@
 using HMSDataAccess.Reposatory.Identity;
 using Microsoft.AspNetCore.Identity;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
+using static HMSContracts.Language.Resource;
+
 namespace HMSBusinessLogic.Manager.IdentityManager
 {
     public interface IRoleManager
@@ -27,7 +29,7 @@ namespace HMSBusinessLogic.Manager.IdentityManager
             if (checkRole is null)
                 await _roleReposatory.AddRole(roleNameModel.Name);
             else
-                throw new ConflictException("the role is already excest");
+                throw new ConflictException(RoleIsExist);
         }
 
         public async Task Delete(string roleId)
@@ -36,7 +38,7 @@ namespace HMSBusinessLogic.Manager.IdentityManager
             if (role is not null)
                 await _roleReposatory.DeleteRole(role);
             else
-                throw new NotFoundException("This role does not excest");
+                throw new NotFoundException(RoleDoesnotExist);
 
         }
 
@@ -47,18 +49,15 @@ namespace HMSBusinessLogic.Manager.IdentityManager
             if (isRole is not null)
             {
                 isRole.Name = role.Name;
-              await _roleReposatory.UpdateRole(isRole);
+                await _roleReposatory.UpdateRole(isRole);
 
             }
             else
-            throw new ConflictException("This role does not excest");
+                throw new NotFoundException(RoleDoesnotExist);
         }
 
-    
-    public async Task<IQueryable<string>> GetAll()
-    {
-        var result = (await _roleReposatory.GetRoles()).Select(a => a.Name);
-        return result;
+        public async Task<IQueryable<string>> GetAll() =>
+             (await _roleReposatory.GetRoles()).Select(a => a.Name);
+
     }
-}
 }

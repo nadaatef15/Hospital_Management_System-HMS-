@@ -2,6 +2,7 @@
 using HMSContracts.Model.Identity;
 using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Identity;
+using static HMSContracts.Language.Resource;
 
 namespace HMSBusinessLogic.Validators
 {
@@ -12,8 +13,8 @@ namespace HMSBusinessLogic.Validators
         {
             userManager = _userManager;
 
-            RuleFor(x => x.Email).MustAsync(EmailTokenBefore).WithMessage("This Email is used before");
-            RuleFor(x => x.UserName).MustAsync(UserNameTokenBefore).WithMessage("This User Name is used before");
+            RuleFor(x => x.Email).MustAsync(EmailTokenBefore).WithMessage(EmailUsedBefore);
+            RuleFor(x => x.UserName).MustAsync(UserNameTokenBefore).WithMessage(UserNameUsedBefore);
         }
 
         public async Task<bool> EmailTokenBefore(string email, CancellationToken cancellation)

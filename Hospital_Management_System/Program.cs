@@ -7,13 +7,13 @@ using HMSBusinessLogic.Manager.PermissionManager;
 using HMSBusinessLogic.Seeds;
 using HMSBusinessLogic.Services.GeneralServices;
 using HMSBusinessLogic.Validators;
-using HMSContracts.Infrastructure.Exceptions;
 using HMSContracts.Model.Identity;
 using HMSDataAccess.Entity;
 using HMSDataAccess.Reposatory.Account;
 using HMSDataAccess.Reposatory.Identity;
 using Hospital_Management_System.Refliction;
 using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 
 namespace Hospital_Management_System
 {
@@ -22,7 +22,7 @@ namespace Hospital_Management_System
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            //Cloudinary
             var cloudinaryConfig = new CloudinaryDotNet.Account(
             builder.Configuration["Cloudinary:CloudName"],
             builder.Configuration["Cloudinary:ApiKey"],
@@ -31,12 +31,30 @@ namespace Hospital_Management_System
             Cloudinary cloudinary = new Cloudinary(cloudinaryConfig);
             builder.Services.AddSingleton(cloudinary);
 
+            //Localization
+            var localizationOptions= new RequestLocalizationOptions();
+            var supportCultures = new[]
+            {
+                new CultureInfo("en"),
+                new CultureInfo("ar")
+            };
+
+            localizationOptions.SupportedCultures = supportCultures;
+            localizationOptions.SupportedUICultures=supportCultures;
+            localizationOptions.SetDefaultCulture("en");
+            localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+
+
+            
+
+
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.DBContextService(builder.Configuration);
             builder.Services.AddIdentity<UserEntity, IdentityRole>().AddEntityFrameworkStores<HMSDBContext>();
             builder.Services.AuthenticationService(builder.Configuration);
             builder.Services.SwaggerConfiguration();
+            builder.Services.AddLocalization();
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -79,6 +97,7 @@ namespace Hospital_Management_System
             }
 
             // Configure the HTTP request pipeline.
+            app.UseRequestLocalization(localizationOptions);
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using HMSBusinessLogic.Helpers.Mappers;
+﻿using HMSBusinessLogic.Helpers.Mappers;
 using HMSBusinessLogic.Resource;
 using HMSBusinessLogic.Services.GeneralServices;
 using HMSContracts.Model.Identity;
@@ -7,7 +6,7 @@ using HMSDataAccess.Entity;
 using HMSDataAccess.Reposatory.Identity;
 using Microsoft.AspNetCore.Identity;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
-
+using static HMSContracts.Language.Resource;
 
 namespace HMSBusinessLogic.Manager.IdentityManager
 {
@@ -37,8 +36,6 @@ namespace HMSBusinessLogic.Manager.IdentityManager
             _userManagerIdentity = userManagerIdentity;
             _roleManager = roleManager;
             _fileService = fileService;
-          
-
         }
 
         public async Task AssignRolesToUser(string userId, List<string> roleNames)
@@ -57,6 +54,8 @@ namespace HMSBusinessLogic.Manager.IdentityManager
                     }
                 }
             }
+            else
+                throw new NotFoundException(UseDoesnotExist);
         }
 
         public async Task<UserResource> GetUserById(string userId)
@@ -64,7 +63,7 @@ namespace HMSBusinessLogic.Manager.IdentityManager
             var user = await _userReposatory.GetUserById(userId);
 
             if (user is null)
-                throw new NotFoundException("This user is not found");
+                throw new NotFoundException(UseDoesnotExist);
             else
                 return user.ToResource();
 
@@ -80,7 +79,7 @@ namespace HMSBusinessLogic.Manager.IdentityManager
                 rolesName.ForEach(async role => await _userManagerIdentity.AddToRoleAsync(user, role));
             }
             else
-                throw new NotFoundException("this User is not excest") ;
+                throw new NotFoundException(UseDoesnotExist) ;
         }
 
         public async Task DeleteUser(string userId)
@@ -89,7 +88,7 @@ namespace HMSBusinessLogic.Manager.IdentityManager
             if (user is not null)
                 await _userReposatory.DeleteUser(userId);
             else
-                throw new NotFoundException("this User is not excest");
+                throw new NotFoundException(UseDoesnotExist);
         }
 
         public async Task UpdateUser(string userId, ModifyUser userModified)
@@ -112,7 +111,7 @@ namespace HMSBusinessLogic.Manager.IdentityManager
                 await _userReposatory.UpdateUser(user);
             }
             else
-                throw new NotFoundException("this User is not excest");
+                throw new NotFoundException(UseDoesnotExist);
         }
 
         public async Task<List<UserResource>> GetAllUsers()
