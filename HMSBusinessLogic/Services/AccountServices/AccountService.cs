@@ -2,17 +2,17 @@
 using Microsoft.AspNetCore.Identity;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
 using static HMSContracts.Language.Resource;
-namespace HMSDataAccess.Reposatory.Account
+namespace HMSBusinessLogic.Services.AccountServices
 {
-    public interface IAccountReposatory
+    public interface IAccountService
     {
         Task<UserEntity> Login(string username, string password);
     }
-    public class AccountReposatory : IAccountReposatory
+    public class AccountService : IAccountService
     {
         UserManager<UserEntity> userManager;
 
-        public AccountReposatory(UserManager<UserEntity> _userManager)
+        public AccountService(UserManager<UserEntity> _userManager)
         {
             userManager = _userManager;
         }

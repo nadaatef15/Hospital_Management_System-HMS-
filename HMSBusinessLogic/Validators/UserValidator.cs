@@ -13,25 +13,25 @@ namespace HMSBusinessLogic.Validators
         {
             userManager = _userManager;
 
-            RuleFor(x => x.Email).MustAsync(EmailTokenBefore).WithMessage(EmailUsedBefore);
-            RuleFor(x => x.UserName).MustAsync(UserNameTokenBefore).WithMessage(UserNameUsedBefore);
+            RuleFor(x => x.Email)
+                .MustAsync(EmailNotTakenBefore)
+                .WithMessage(EmailUsedBefore);
+
+            RuleFor(x => x.UserName)
+                .MustAsync(UserNameNotTakenBefore)
+                .WithMessage(UserNameUsedBefore);
         }
 
-        public async Task<bool> EmailTokenBefore(string email, CancellationToken cancellation)
+        public async Task<bool> EmailNotTakenBefore(string email, CancellationToken cancellation)
         {
-            var user= await userManager.FindByEmailAsync(email);
-            if (user is null) return true;
-            return false; 
+            var user = await userManager.FindByEmailAsync(email);
+            return user is null;
         }
 
-        public async Task<bool> UserNameTokenBefore(string UserName, CancellationToken cancellation)
+        public async Task<bool> UserNameNotTakenBefore(string UserName, CancellationToken cancellation)
         {
             var user = await userManager.FindByNameAsync(UserName);
-            if (user is null) return true;
-            return false;
+            return user is null;
         }
-
-
-
     }
 }

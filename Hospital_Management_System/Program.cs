@@ -7,12 +7,14 @@ using HMSBusinessLogic.Manager.PermissionManager;
 using HMSBusinessLogic.Seeds;
 using HMSBusinessLogic.Services.GeneralServices;
 using HMSBusinessLogic.Validators;
+using HMSContracts.Email;
 using HMSContracts.Model.Identity;
 using HMSDataAccess.Entity;
 using HMSDataAccess.Reposatory.Account;
 using HMSDataAccess.Reposatory.Identity;
 using Hospital_Management_System.Refliction;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Globalization;
 
 namespace Hospital_Management_System
@@ -71,6 +73,8 @@ namespace Hospital_Management_System
             builder.Services.AddScoped<IPermission, PermissionManager>();
             builder.Services.AddScoped<IValidator<UserModel>, UserValidator>();
             builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddTransient<IEmail, EmailSender>();
+
 
             var app = builder.Build();
 
