@@ -61,6 +61,15 @@ namespace HMSContracts.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The appointment does not exist.
+        /// </summary>
+        public static string appointmentDoesnotExist {
+            get {
+                return ResourceManager.GetString("appointmentDoesnotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This Email does not exist.
         /// </summary>
         public static string EmailNotFound {
@@ -79,11 +88,47 @@ namespace HMSContracts.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This Appointment is used in MedicalRecord You can not delete it.
+        /// </summary>
+        public static string invalidAppointment {
+            get {
+                return ResourceManager.GetString("invalidAppointment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The appointment does not exist.
+        /// </summary>
+        public static string MedicalRecordDoesnotExist {
+            get {
+                return ResourceManager.GetString("MedicalRecordDoesnotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Medical Record is deleted.
+        /// </summary>
+        public static string MRDeleted {
+            get {
+                return ResourceManager.GetString("MRDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must upload a file or provide an image path..
         /// </summary>
         public static string MustUpload {
             get {
                 return ResourceManager.GetString("MustUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to patient does not has this appointment.
+        /// </summary>
+        public static string patientDoesnotHasThisAppointment {
+            get {
+                return ResourceManager.GetString("patientDoesnotHasThisAppointment", resourceCulture);
             }
         }
         
@@ -102,6 +147,24 @@ namespace HMSContracts.Language {
         public static string RoleIsExist {
             get {
                 return ResourceManager.GetString("RoleIsExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The UserName or Email is used before.
+        /// </summary>
+        public static string UsedBefore {
+            get {
+                return ResourceManager.GetString("UsedBefore", resourceCulture);
             }
         }
         

@@ -117,20 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="appointmentDoesnotExist" xml:space="preserve">
+    <value>The appointment does not exist</value>
+  </data>
   <data name="EmailNotFound" xml:space="preserve">
     <value>This Email does not exist</value>
   </data>
   <data name="EmailUsedBefore" xml:space="preserve">
     <value>This Email is used before</value>
   </data>
+  <data name="invalidAppointment" xml:space="preserve">
+    <value>This Appointment is used in MedicalRecord You can not delete it</value>
+  </data>
+  <data name="MedicalRecordDoesnotExist" xml:space="preserve">
+    <value>The appointment does not exist</value>
+  </data>
+  <data name="MRDeleted" xml:space="preserve">
+    <value>This Medical Record is deleted</value>
+  </data>
   <data name="MustUpload" xml:space="preserve">
     <value>You must upload a file or provide an image path.</value>
+  </data>
+  <data name="patientDoesnotHasThisAppointment" xml:space="preserve">
+    <value>patient does not has this appointment</value>
   </data>
   <data name="RoleDoesnotExist" xml:space="preserve">
     <value>This role doesn't exist</value>
   </data>
   <data name="RoleIsExist" xml:space="preserve">
     <value>The role is already exist</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UsedBefore" xml:space="preserve">
+    <value>The UserName or Email is used before</value>
   </data>
   <data name="UseDoesnotExist" xml:space="preserve">
     <value>This user doesn't exist</value>

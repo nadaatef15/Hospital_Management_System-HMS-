@@ -2,19 +2,25 @@ using CloudinaryDotNet;
 using Data.Entity;
 using FluentValidation;
 using HMSBusinessLogic.Manager.AccountManager;
+using HMSBusinessLogic.Manager.Appointment;
+using HMSBusinessLogic.Manager.Doctor;
 using HMSBusinessLogic.Manager.IdentityManager;
+using HMSBusinessLogic.Manager.LabTechnician;
+using HMSBusinessLogic.Manager.MedicalRecord;
+using HMSBusinessLogic.Manager.Patient;
 using HMSBusinessLogic.Manager.PermissionManager;
+using HMSBusinessLogic.Manager.Receptionist;
 using HMSBusinessLogic.Seeds;
 using HMSBusinessLogic.Services.GeneralServices;
 using HMSBusinessLogic.Validators;
+using HMSContracts;
 using HMSContracts.Email;
 using HMSContracts.Model.Identity;
+using HMSContracts.Model.MedicalRecord;
 using HMSDataAccess.Entity;
-using HMSDataAccess.Reposatory.Account;
-using HMSDataAccess.Reposatory.Identity;
+using HMSDataAccess.Repo;
 using Hospital_Management_System.Refliction;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Globalization;
 
 namespace Hospital_Management_System
@@ -34,7 +40,7 @@ namespace Hospital_Management_System
             builder.Services.AddSingleton(cloudinary);
 
             //Localization
-            var localizationOptions= new RequestLocalizationOptions();
+            var localizationOptions = new RequestLocalizationOptions();
             var supportCultures = new[]
             {
                 new CultureInfo("en"),
@@ -42,16 +48,19 @@ namespace Hospital_Management_System
             };
 
             localizationOptions.SupportedCultures = supportCultures;
-            localizationOptions.SupportedUICultures=supportCultures;
+            localizationOptions.SupportedUICultures = supportCultures;
             localizationOptions.SetDefaultCulture("en");
             localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
 
 
-            
+
 
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+            });
             builder.Services.DBContextService(builder.Configuration);
             builder.Services.AddIdentity<UserEntity, IdentityRole>().AddEntityFrameworkStores<HMSDBContext>();
             builder.Services.AuthenticationService(builder.Configuration);
@@ -64,16 +73,23 @@ namespace Hospital_Management_System
             builder.Services.AddSwaggerGen();
 
 
-            builder.Services.AddScoped<IUserReposatory, UserReposatory>();
-            builder.Services.AddScoped<IRoleReposatory, RoleReposatory>();
             builder.Services.AddScoped<IUserManager, UserManager>();
             builder.Services.AddScoped<IRoleManager, RoleManager>();
-            builder.Services.AddScoped<IAccountReposatory, AccountReposatory>();
             builder.Services.AddScoped<IAccountManager, AccountManager>();
             builder.Services.AddScoped<IPermission, PermissionManager>();
             builder.Services.AddScoped<IValidator<UserModel>, UserValidator>();
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddTransient<IEmail, EmailSender>();
+            builder.Services.AddScoped<IReceptionistManager, ReceptionistManager>();
+            builder.Services.AddScoped<IReceptionistRepo, ReceptionistRepo>();
+            builder.Services.AddScoped<IDoctorManager, DoctorManager>();
+            builder.Services.AddScoped<IPatientsManager, PatientsManager>();
+            builder.Services.AddScoped<ILabTechnicianManager, LabTechnicianManager>();
+            builder.Services.AddScoped<IMedicalRecordREpo, MedicalRecordRepo>();
+            builder.Services.AddScoped<IMedicalRecordManager, MedicalRecordManager>();
+            builder.Services.AddScoped<IAppointmentRepo, AppointmentRepo>();
+            builder.Services.AddScoped<IAppointmentManager, AppointmentManager>();
+
 
 
             var app = builder.Build();
@@ -108,7 +124,7 @@ namespace Hospital_Management_System
                 app.UseSwaggerUI();
             }
 
-       //   app.UseMiddleware<ExceptionHandlingMiddleware>();
+            //   app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

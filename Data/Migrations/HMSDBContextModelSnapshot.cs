@@ -22,85 +22,6 @@ namespace HMSDataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HMSDataAccess.Entity.UserEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
             modelBuilder.Entity("HMSDataAccess.Entity.Appointment", b =>
                 {
                     b.Property<int>("Id")
@@ -118,6 +39,9 @@ namespace HMSDataAccess.Migrations
 
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PatientId")
                         .IsRequired()
@@ -157,22 +81,6 @@ namespace HMSDataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Diagnoses");
-                });
-
-            modelBuilder.Entity("HMSDataAccess.Entity.Doctor", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("HMSDataAccess.Entity.DoctorSchedule", b =>
@@ -232,6 +140,9 @@ namespace HMSDataAccess.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PatientId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -282,22 +193,6 @@ namespace HMSDataAccess.Migrations
                     b.ToTable("InvoiceItems");
                 });
 
-            modelBuilder.Entity("HMSDataAccess.Entity.LabTechnician", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("LabTechnicians");
-                });
-
             modelBuilder.Entity("HMSDataAccess.Entity.MedicalRecord", b =>
                 {
                     b.Property<int>("Id")
@@ -315,6 +210,9 @@ namespace HMSDataAccess.Migrations
                     b.Property<string>("DoctorId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Note")
                         .IsRequired()
@@ -363,6 +261,9 @@ namespace HMSDataAccess.Migrations
                     b.Property<int>("MedicalRecordId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LabTechnicianId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -405,22 +306,6 @@ namespace HMSDataAccess.Migrations
                     b.ToTable("Medicine");
                 });
 
-            modelBuilder.Entity("HMSDataAccess.Entity.Patient", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Patients");
-                });
-
             modelBuilder.Entity("HMSDataAccess.Entity.Payment", b =>
                 {
                     b.Property<int>("Id")
@@ -431,6 +316,9 @@ namespace HMSDataAccess.Migrations
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PaidAmount")
                         .HasColumnType("int");
@@ -463,38 +351,6 @@ namespace HMSDataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PaymentMethod");
-                });
-
-            modelBuilder.Entity("HMSDataAccess.Entity.Pharmasist", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Pharmasists");
-                });
-
-            modelBuilder.Entity("HMSDataAccess.Entity.Receptionist", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Receptionists");
                 });
 
             modelBuilder.Entity("HMSDataAccess.Entity.Specialties", b =>
@@ -534,6 +390,89 @@ namespace HMSDataAccess.Migrations
                     b.ToTable("Tests");
                 });
 
+            modelBuilder.Entity("HMSDataAccess.Entity.UserEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
             modelBuilder.Entity("HMSDataAccess.Model.Prescription", b =>
                 {
                     b.Property<int>("Id")
@@ -548,6 +487,9 @@ namespace HMSDataAccess.Migrations
                     b.Property<string>("Dosage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("MedicalRecordId")
                         .HasColumnType("int");
@@ -706,15 +648,53 @@ namespace HMSDataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("HMSDataAccess.Entity.DoctorEntity", b =>
+                {
+                    b.HasBaseType("HMSDataAccess.Entity.UserEntity");
+
+                    b.Property<int?>("Salary")
+                        .HasColumnType("int");
+
+                    b.ToTable("Doctors", (string)null);
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.LabTechnicianEntity", b =>
+                {
+                    b.HasBaseType("HMSDataAccess.Entity.UserEntity");
+
+                    b.ToTable("LabTechnicians", (string)null);
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.PatientEntity", b =>
+                {
+                    b.HasBaseType("HMSDataAccess.Entity.UserEntity");
+
+                    b.ToTable("Patients", (string)null);
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.PharmasistEntity", b =>
+                {
+                    b.HasBaseType("HMSDataAccess.Entity.UserEntity");
+
+                    b.ToTable("Pharmasists", (string)null);
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.ReceptionistEntity", b =>
+                {
+                    b.HasBaseType("HMSDataAccess.Entity.UserEntity");
+
+                    b.ToTable("Receptionists", (string)null);
+                });
+
             modelBuilder.Entity("HMSDataAccess.Entity.Appointment", b =>
                 {
-                    b.HasOne("HMSDataAccess.Entity.Doctor", "Doctor")
+                    b.HasOne("HMSDataAccess.Entity.DoctorEntity", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HMSDataAccess.Entity.Patient", "Patient")
+                    b.HasOne("HMSDataAccess.Entity.PatientEntity", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -725,20 +705,9 @@ namespace HMSDataAccess.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("HMSDataAccess.Entity.Doctor", b =>
-                {
-                    b.HasOne("HMSDataAccess.Entity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("HMSDataAccess.Entity.DoctorSchedule", b =>
                 {
-                    b.HasOne("HMSDataAccess.Entity.Doctor", "Doctor")
+                    b.HasOne("HMSDataAccess.Entity.DoctorEntity", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -755,7 +724,7 @@ namespace HMSDataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HMSDataAccess.Entity.Patient", "Patient")
+                    b.HasOne("HMSDataAccess.Entity.PatientEntity", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -777,17 +746,6 @@ namespace HMSDataAccess.Migrations
                     b.Navigation("Invoice");
                 });
 
-            modelBuilder.Entity("HMSDataAccess.Entity.LabTechnician", b =>
-                {
-                    b.HasOne("HMSDataAccess.Entity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("HMSDataAccess.Entity.MedicalRecord", b =>
                 {
                     b.HasOne("HMSDataAccess.Entity.Appointment", "Appointment")
@@ -796,13 +754,13 @@ namespace HMSDataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HMSDataAccess.Entity.Doctor", "Doctor")
+                    b.HasOne("HMSDataAccess.Entity.DoctorEntity", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HMSDataAccess.Entity.Patient", "Patient")
+                    b.HasOne("HMSDataAccess.Entity.PatientEntity", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -817,24 +775,13 @@ namespace HMSDataAccess.Migrations
 
             modelBuilder.Entity("HMSDataAccess.Entity.MedicalRecordTests", b =>
                 {
-                    b.HasOne("HMSDataAccess.Entity.LabTechnician", "LabTechnician")
+                    b.HasOne("HMSDataAccess.Entity.LabTechnicianEntity", "LabTechnician")
                         .WithMany()
                         .HasForeignKey("LabTechnicianId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("LabTechnician");
-                });
-
-            modelBuilder.Entity("HMSDataAccess.Entity.Patient", b =>
-                {
-                    b.HasOne("HMSDataAccess.Entity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HMSDataAccess.Entity.Payment", b =>
@@ -846,28 +793,6 @@ namespace HMSDataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("PaymentMethod");
-                });
-
-            modelBuilder.Entity("HMSDataAccess.Entity.Pharmasist", b =>
-                {
-                    b.HasOne("HMSDataAccess.Entity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("HMSDataAccess.Entity.Receptionist", b =>
-                {
-                    b.HasOne("HMSDataAccess.Entity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HMSDataAccess.Model.Prescription", b =>
@@ -884,7 +809,7 @@ namespace HMSDataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HMSDataAccess.Entity.Pharmasist", "Pharmasist")
+                    b.HasOne("HMSDataAccess.Entity.PharmasistEntity", "Pharmasist")
                         .WithMany()
                         .HasForeignKey("PharmasistId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -944,6 +869,51 @@ namespace HMSDataAccess.Migrations
                     b.HasOne("HMSDataAccess.Entity.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.DoctorEntity", b =>
+                {
+                    b.HasOne("HMSDataAccess.Entity.UserEntity", null)
+                        .WithOne()
+                        .HasForeignKey("HMSDataAccess.Entity.DoctorEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.LabTechnicianEntity", b =>
+                {
+                    b.HasOne("HMSDataAccess.Entity.UserEntity", null)
+                        .WithOne()
+                        .HasForeignKey("HMSDataAccess.Entity.LabTechnicianEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.PatientEntity", b =>
+                {
+                    b.HasOne("HMSDataAccess.Entity.UserEntity", null)
+                        .WithOne()
+                        .HasForeignKey("HMSDataAccess.Entity.PatientEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.PharmasistEntity", b =>
+                {
+                    b.HasOne("HMSDataAccess.Entity.UserEntity", null)
+                        .WithOne()
+                        .HasForeignKey("HMSDataAccess.Entity.PharmasistEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HMSDataAccess.Entity.ReceptionistEntity", b =>
+                {
+                    b.HasOne("HMSDataAccess.Entity.UserEntity", null)
+                        .WithOne()
+                        .HasForeignKey("HMSDataAccess.Entity.ReceptionistEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

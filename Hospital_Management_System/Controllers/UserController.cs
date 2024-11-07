@@ -33,7 +33,7 @@ namespace Hospital_Management_System.Controllers
             return Ok();
         }
 
-        [HttpPut("UpdateRole")]
+        [HttpPut("UpdateUser")]
         public async Task<IActionResult> Updateuser(string userId, [FromForm]ModifyUser userModel)
         {
             await userManager.UpdateUser(userId, userModel);

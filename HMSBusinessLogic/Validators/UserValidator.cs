@@ -6,12 +6,12 @@ using static HMSContracts.Language.Resource;
 
 namespace HMSBusinessLogic.Validators
 {
-    public class UserValidator : AbstractValidator<UserModel>
+    public class UserValidator : AbstractValidator<UserModel> 
     {
-        UserManager<UserEntity> userManager;
-        public UserValidator(UserManager<UserEntity> _userManager)
+        UserManager<UserEntity> _userManager;
+        public UserValidator(UserManager<UserEntity> userManager)
         {
-            userManager = _userManager;
+             _userManager = userManager;
 
             RuleFor(x => x.Email)
                 .MustAsync(EmailNotTakenBefore)
@@ -24,13 +24,13 @@ namespace HMSBusinessLogic.Validators
 
         public async Task<bool> EmailNotTakenBefore(string email, CancellationToken cancellation)
         {
-            var user = await userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
             return user is null;
         }
 
         public async Task<bool> UserNameNotTakenBefore(string UserName, CancellationToken cancellation)
         {
-            var user = await userManager.FindByNameAsync(UserName);
+            var user = await _userManager.FindByNameAsync(UserName);
             return user is null;
         }
     }

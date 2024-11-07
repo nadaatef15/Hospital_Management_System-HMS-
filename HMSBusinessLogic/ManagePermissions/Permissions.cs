@@ -18,7 +18,7 @@ namespace HMSBusinessLogic.ManagePermissions
 
         public static List<string> GetAllPermissions()
         {
-            List<string> AllPermissions = new List<string>();
+            var AllPermissions = new List<string>();
 
             foreach (var model in Enum.GetValues(typeof(model)))
                 AllPermissions.AddRange(GetPermissionforModel(model.ToString()));

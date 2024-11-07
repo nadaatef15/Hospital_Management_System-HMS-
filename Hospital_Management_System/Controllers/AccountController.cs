@@ -39,11 +39,19 @@ namespace Hospital_Management_System.Controllers
             return Created();
         }
 
-        [HttpPost("SendingEmail")]
-        public async Task<IActionResult> SendingEmail()
+        //[HttpPost("SendingEmail")]
+        //public async Task<IActionResult> SendingEmail()
+        //{
+        //    await _emailSender.SendEmailAsync("sagdallrahman3@gmail.com", "This is test", "I am nada");
+        //    return Ok("SendSuccessfully");
+        //}
+
+
+        [HttpPatch("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(string userId , ChangePasswordModel model)
         {
-            await _emailSender.SendEmailAsync("sagdallrahman3@gmail.com", "This is test", "I am nada");
-            return Ok("SendSuccessfully");
+            await _accountManager.ChangePassword(userId, model);
+            return Ok();
         }
     }
 }

@@ -37,6 +37,7 @@ namespace HMSContracts.Email
             await smtp.DisconnectAsync(true);
 
 
+            #region simpleway
             //var smtpClient = new System.Net.Mail.SmtpClient(emailSettings["SmtpServer"])
             //{
             //    Port = 587,
@@ -55,7 +56,7 @@ namespace HMSContracts.Email
 
             //await smtpClient.SendMailAsync(mailMessage);
 
-
+            #endregion
         }
     }
 }
