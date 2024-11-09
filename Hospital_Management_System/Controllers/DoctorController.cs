@@ -1,4 +1,5 @@
 ﻿using HMSBusinessLogic.Manager.Doctor;
+using HMSContracts.Model.Identity;
 using HMSContracts.Model.Users;
 using Microsoft.AspNetCore.Mvc;
 

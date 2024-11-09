@@ -2,7 +2,7 @@
 
 namespace HMSContracts.Model.Users
 {
-    public class ModifiedDoctor :ModifyUser
+    public class ModifiedDoctor :UserModel
     {
         public int Salary { get; set; }
     }

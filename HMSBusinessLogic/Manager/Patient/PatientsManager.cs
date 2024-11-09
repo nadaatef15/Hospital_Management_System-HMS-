@@ -7,13 +7,15 @@ using HMSContracts.Model.Identity;
 using HMSContracts.Model.Users;
 using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Identity;
+using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
+using static HMSContracts.Language.Resource;
 
 namespace HMSBusinessLogic.Manager.Patient
 {
     public interface IPatientsManager
     {
         Task Register(PatientModel user);
-        Task Update(string UsertId, ModifyUser userModified);
+        Task Update(string UsertId, UserModel userModified);
     }
     public class PatientsManager : IPatientsManager
     {
@@ -51,9 +53,16 @@ namespace HMSBusinessLogic.Manager.Patient
             await _userManagerIdentity.AddToRoleAsync(PatientEntity, SysConstants.Patient);
         }
 
-        public async Task Update(string UserId, ModifyUser userModified)
+        public async Task Update(string id, UserModel userModified)
         {
-            await _userManager.UpdateUser(UserId, userModified);
+
+            var user = await _userManagerIdentity.FindByIdAsync(id) ??
+                 throw new NotFoundException(UseDoesnotExist);
+
+            if (userModified.Id != id)
+                throw new ConflictException(NotTheSameId);
+
+            await _userManager.UpdateUser(user, userModified);
         }
     }
 }

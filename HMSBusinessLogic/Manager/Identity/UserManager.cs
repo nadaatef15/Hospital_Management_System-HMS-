@@ -5,7 +5,6 @@ using HMSBusinessLogic.Services.GeneralServices;
 using HMSContracts.Model.Identity;
 using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
 using static HMSContracts.Language.Resource;
@@ -16,7 +15,7 @@ namespace HMSBusinessLogic.Manager.IdentityManager
     {
         Task AssignRolesToUser(string userId, List<string> rolesId);
         Task<UserResource> GetUserById(string userId);
-        Task UpdateUser(string userId, ModifyUser userModel);
+        Task UpdateUser(UserEntity user, UserModel userModified);
         Task DeleteUser(string userId);
         Task<List<UserResource>> GetAllUsers();
 
@@ -25,13 +24,16 @@ namespace HMSBusinessLogic.Manager.IdentityManager
     {
         private readonly UserManager<UserEntity> _userManager;
         private readonly IFileService _fileService;
+        private readonly IValidator<UserModel> _validator;
 
         public UserManager(UserManager<UserEntity> userManagerIdentity,
-            IFileService fileService
+            IFileService fileService,
+            IValidator<UserModel> validator
            )
         {
             _userManager = userManagerIdentity;
             _fileService = fileService;
+            _validator = validator; 
         }
 
         public async Task AssignRolesToUser(string userId, List<string> roleNames)
@@ -72,25 +74,13 @@ namespace HMSBusinessLogic.Manager.IdentityManager
 
             //await _userManagerIdentity.DeleteAsync(user);
             user.isDeleted = true;
+            await _userManager.UpdateAsync(user);
         }
 
-        public async Task UpdateUser(string userId, ModifyUser userModified)
+        public async Task UpdateUser(UserEntity user, UserModel userModified)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            await _validator.ValidateAndThrowAsync(userModified);
 
-            if (user is null)
-                throw new NotFoundException(UseDoesnotExist);
-
-            //if the the email or the name is used before in the application
-
-            var userByEmail = await _userManager.FindByEmailAsync(userModified.Email);
-            var userByUserName = await _userManager.FindByNameAsync(userModified.UserName);
-
-            if (userByUserName.Id != user.Id || userByEmail.Id != user.Id)
-                throw new ConflictException(UsedBefore);
-
-            else
-            {
                 user.PhoneNumber = userModified.Phone;
                 user.Address = userModified.Address;
                 user.Age = userModified.Age;
@@ -99,7 +89,7 @@ namespace HMSBusinessLogic.Manager.IdentityManager
 
                 if (userModified.Image is not null)
                     user.ImagePath = await _fileService.UploadImage(userModified.Image);
-            }
+            
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)

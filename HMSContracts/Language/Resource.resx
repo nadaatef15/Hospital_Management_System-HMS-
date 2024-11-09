@@ -138,6 +138,9 @@
   <data name="MustUpload" xml:space="preserve">
     <value>You must upload a file or provide an image path.</value>
   </data>
+  <data name="NotTheSameId" xml:space="preserve">
+    <value>The id is not the same </value>
+  </data>
   <data name="patientDoesnotHasThisAppointment" xml:space="preserve">
     <value>patient does not has this appointment</value>
   </data>

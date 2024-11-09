@@ -7,13 +7,16 @@ using HMSContracts.Model.Identity;
 using HMSContracts.Model.Users;
 using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Identity;
+using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
+using static HMSContracts.Language.Resource;
+
 
 namespace HMSBusinessLogic.Manager.LabTechnician
 {
     public interface ILabTechnicianManager
     {
         Task Register(labTechnicianModel user);
-        Task Update(string UserId, ModifyUser userModified);
+        Task Update(string id, UserModel userModified);
     }
     public class LabTechnicianManager : ILabTechnicianManager
     {
@@ -52,9 +55,16 @@ namespace HMSBusinessLogic.Manager.LabTechnician
         }
 
 
-        public async Task Update(string UserId, ModifyUser userModified)
+        public async Task Update(string id, UserModel userModified)
         {
-            await _userManager.UpdateUser(UserId, userModified);
+
+            var user = await _userManagerIdentity.FindByIdAsync(id) ??
+                 throw new NotFoundException(UseDoesnotExist);
+
+            if (userModified.Id != id)
+                throw new ConflictException(NotTheSameId);
+
+            await _userManager.UpdateUser(user, userModified);
         }
     }
 }

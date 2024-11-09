@@ -20,7 +20,7 @@ namespace Hospital_Management_System.Controllers
             return Created();
         }
         [HttpPut("Update")]
-        public async Task<IActionResult> Update(string id ,  [FromForm] ModifyUser user)
+        public async Task<IActionResult> Update(string id ,  [FromForm] UserModel user)
         {
             await _receptionistManager.Update(id,user);
             return Ok();

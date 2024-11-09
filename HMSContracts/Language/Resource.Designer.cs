@@ -124,6 +124,15 @@ namespace HMSContracts.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The id is not the same .
+        /// </summary>
+        public static string NotTheSameId {
+            get {
+                return ResourceManager.GetString("NotTheSameId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to patient does not has this appointment.
         /// </summary>
         public static string patientDoesnotHasThisAppointment {

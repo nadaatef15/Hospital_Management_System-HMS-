@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using HMSBusinessLogic.Helpers.Mappers;
-using HMSBusinessLogic.Manager.AccountManager;
 using HMSBusinessLogic.Manager.IdentityManager;
 using HMSBusinessLogic.Services.GeneralServices;
 using HMSContracts.Constants;
@@ -15,7 +14,7 @@ namespace HMSBusinessLogic.Manager.Receptionist
     public interface IReceptionistManager
     {
         Task Register(ReceptionistModel user);
-        Task Update(string ReceptionistId, ModifyUser user);
+        Task Update(string id, UserModel userModified);
 
     }
     public class ReceptionistManager : IReceptionistManager
@@ -91,9 +90,15 @@ namespace HMSBusinessLogic.Manager.Receptionist
         //    }
         //}
         #endregion
-        public async Task Update(string ReceptionistId, ModifyUser userModified)
+        public async Task Update(string id, UserModel userModified)
         {
-            await _userManager.UpdateUser(ReceptionistId, userModified);
+            var user = await _userManagerIdentity.FindByIdAsync(id) ??
+                 throw new NotFoundException(UseDoesnotExist);
+
+            if (userModified.Id != id)
+                throw new ConflictException(NotTheSameId);
+
+            await _userManager.UpdateUser(user, userModified);
         }
 
     }

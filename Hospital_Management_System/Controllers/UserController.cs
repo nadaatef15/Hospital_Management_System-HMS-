@@ -1,5 +1,6 @@
 ﻿using HMSBusinessLogic.Manager.IdentityManager;
 using HMSContracts.Model.Identity;
+using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital_Management_System.Controllers
@@ -34,9 +35,9 @@ namespace Hospital_Management_System.Controllers
         }
 
         [HttpPut("UpdateUser")]
-        public async Task<IActionResult> Updateuser(string userId, [FromForm]ModifyUser userModel)
+        public async Task<IActionResult> Updateuser(UserEntity user, [FromForm] UserModel userModel)
         {
-            await userManager.UpdateUser(userId, userModel);
+            await userManager.UpdateUser(user, userModel);
             return Ok();
         }
 

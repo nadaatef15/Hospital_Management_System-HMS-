@@ -20,7 +20,6 @@ namespace HMSBusinessLogic.Manager.Doctor
     {
         Task Register(DoctorModel user);
         Task Update(string dctorId, ModifiedDoctor userModified);
-
     }
     public class DoctorManager : IDoctorManager
     {
@@ -67,8 +66,11 @@ namespace HMSBusinessLogic.Manager.Doctor
             var doctor = await _dbcontext.Doctors.FirstOrDefaultAsync(a => a.Id == dctorId) ??
                 throw new NotFoundException(UseDoesnotExist);
 
+            if (userModified.Id != dctorId)
+                throw new ConflictException(NotTheSameId);
+
             doctor.Salary = userModified.Salary;
-            await _userManager.UpdateUser(dctorId, userModified);
+            await _userManager.UpdateUser(doctor, userModified);
         }
 
 

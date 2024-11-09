@@ -5,6 +5,8 @@ namespace HMSContracts.Model.Identity
 {
     public class UserModel
     {
+        public string? Id { get; set; }
+
         [Required]
         public string UserName { get; set; }
 
@@ -17,11 +19,11 @@ namespace HMSContracts.Model.Identity
         public char Gender { get; set; }
 
         [Required]
-       // [RegularExpression("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\r\n", ErrorMessage = "Email does not follow the pattern")]
+        // [RegularExpression("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\r\n", ErrorMessage = "Email does not follow the pattern")]
         public string Email { get; set; }
 
         [Required]
-       // [RegularExpression("^01[0-5]\\d{8}$\r\n")]
+        // [RegularExpression("^01[0-5]\\d{8}$\r\n")]
         public string Phone { get; set; }
 
         [Required]
