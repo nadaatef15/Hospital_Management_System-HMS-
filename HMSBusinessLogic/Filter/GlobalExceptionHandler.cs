@@ -6,7 +6,7 @@ using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
 
 namespace HMSBusinessLogic.Filter
 {
-    public class GlobalExceptionHandler :ExceptionFilterAttribute
+    public class GlobalExceptionHandler : ExceptionFilterAttribute
     {
         public override void OnException(ExceptionContext context)
         {

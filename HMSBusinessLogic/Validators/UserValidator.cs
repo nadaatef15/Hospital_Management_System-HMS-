@@ -6,32 +6,33 @@ using static HMSContracts.Language.Resource;
 
 namespace HMSBusinessLogic.Validators
 {
-    public class UserValidator : AbstractValidator<UserModel>
+    public class UserValidator : AbstractValidator<UserModel> 
     {
-        UserManager<UserEntity> userManager;
-        public UserValidator(UserManager<UserEntity> _userManager)
+        UserManager<UserEntity> _userManager;
+        public UserValidator(UserManager<UserEntity> userManager)
         {
-            userManager = _userManager;
+             _userManager = userManager;
 
-            RuleFor(x => x.Email)
+            RuleFor(x => x)
                 .MustAsync(EmailNotTakenBefore)
                 .WithMessage(EmailUsedBefore);
 
-            RuleFor(x => x.UserName)
+            RuleFor(x => x)
                 .MustAsync(UserNameNotTakenBefore)
                 .WithMessage(UserNameUsedBefore);
         }
 
-        public async Task<bool> EmailNotTakenBefore(string email, CancellationToken cancellation)
+        public async Task<bool> EmailNotTakenBefore(UserModel userModel, CancellationToken cancellation)
         {
-            var user = await userManager.FindByEmailAsync(email);
-            return user is null;
+            var user = await _userManager.FindByEmailAsync(userModel.Email);
+
+            return user is null || user.Id == userModel.Id;
         }
 
-        public async Task<bool> UserNameNotTakenBefore(string UserName, CancellationToken cancellation)
+        public async Task<bool> UserNameNotTakenBefore(UserModel userModel, CancellationToken cancellation)
         {
-            var user = await userManager.FindByNameAsync(UserName);
-            return user is null;
+            var user = await _userManager.FindByNameAsync(userModel.UserName);
+            return user is null || user.Id== userModel.Id;
         }
     }
 }

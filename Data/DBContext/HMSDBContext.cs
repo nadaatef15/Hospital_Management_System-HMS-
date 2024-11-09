@@ -9,19 +9,19 @@ namespace Data.Entity
     {
         public HMSDBContext()
         {
-            
+
         }
 
-        public HMSDBContext(DbContextOptions options):base(options)
+        public HMSDBContext(DbContextOptions options) : base(options)
         {
-           
+
         }
 
-        public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<Patient> Patients { get; set; }
-        public DbSet<Receptionist> Receptionists { get; set; }
-        public DbSet<Pharmasist> Pharmasists { get; set; }
-        public DbSet<LabTechnician> LabTechnicians { get; set; }
+        public DbSet<DoctorEntity> Doctors { get; set; }
+        public DbSet<PatientEntity> Patients { get; set; }
+        public DbSet<ReceptionistEntity> Receptionists { get; set; }
+        public DbSet<PharmasistEntity> Pharmasists { get; set; }
+        public DbSet<LabTechnicianEntity> LabTechnicians { get; set; }
         public DbSet<Medicine> Medicine { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<Payment> Payments { get; set; }
@@ -45,6 +45,24 @@ namespace Data.Entity
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<DoctorEntity>()
+                .ToTable("Doctors");
+
+            builder.Entity<PatientEntity>()
+                .ToTable("Patients");
+
+            builder.Entity<ReceptionistEntity>()
+              .ToTable("Receptionists");
+
+            builder.Entity<PharmasistEntity>()
+              .ToTable("Pharmasists");
+
+            builder.Entity<LabTechnicianEntity>()
+              .ToTable("LabTechnicians");
+
+
+
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
 using static HMSContracts.Constants.SysEnums;
 
 namespace HMSDataAccess.Entity
@@ -14,5 +12,7 @@ namespace HMSDataAccess.Entity
         public int Age { get; set; }
 
         public Gender Gender { get; set; }
+
+        public bool isDeleted {  get; set; } = false;
     }
 }
