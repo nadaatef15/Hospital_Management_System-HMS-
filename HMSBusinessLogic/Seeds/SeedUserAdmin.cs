@@ -1,4 +1,5 @@
 ﻿using HMSBusinessLogic.ManagePermissions;
+using HMSContracts.Constants;
 using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -9,7 +10,7 @@ namespace HMSBusinessLogic.Seeds
 {
     public static class SeedUserAdmin
     {
-        public static async Task SeedAdmin(UserManager<UserEntity> userManager , RoleManager<IdentityRole> roleManager)
+        public static async Task SeedAdmin(UserManager<UserEntity> userManager, RoleManager<IdentityRole> roleManager)
         {
             var admin = new UserEntity
             {
@@ -27,17 +28,17 @@ namespace HMSBusinessLogic.Seeds
             if (result == null)
             {
                 await userManager.CreateAsync(admin, "Admin123@");
-                await userManager.AddToRoleAsync(admin, "Admin");
-               await roleManager.AssignPermissionsToAdmin();
+                await userManager.AddToRoleAsync(admin, SysConstants.Admin);
+                await roleManager.AssignPermissionsToAdmin();
             }
         }
 
         public static async Task AssignPermissionsToAdmin(this RoleManager<IdentityRole> roleManager)
         {
             var admin = await roleManager.FindByNameAsync("Admin");
-            foreach(model item in Enum.GetValues(typeof(model)))
+            foreach (model item in Enum.GetValues(typeof(model)))
             {
-              await roleManager.SeedPermissionForAllModels(item.ToString(), admin);
+                await roleManager.SeedPermissionForAllModels(item.ToString(), admin);
 
             }
         }

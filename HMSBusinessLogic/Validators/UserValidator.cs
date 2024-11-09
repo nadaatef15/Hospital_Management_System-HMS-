@@ -2,35 +2,37 @@
 using HMSContracts.Model.Identity;
 using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Identity;
+using static HMSContracts.Language.Resource;
 
 namespace HMSBusinessLogic.Validators
 {
-    public class UserValidator : AbstractValidator<UserModel>
+    public class UserValidator : AbstractValidator<UserModel> 
     {
-        UserManager<UserEntity> userManager;
-        public UserValidator(UserManager<UserEntity> _userManager)
+        UserManager<UserEntity> _userManager;
+        public UserValidator(UserManager<UserEntity> userManager)
         {
-            userManager = _userManager;
+             _userManager = userManager;
 
-            RuleFor(x => x.Email).MustAsync(EmailTokenBefore).WithMessage("This Email is used before");
-            RuleFor(x => x.UserName).MustAsync(UserNameTokenBefore).WithMessage("This User Name is used before");
+            RuleFor(x => x)
+                .MustAsync(EmailNotTakenBefore)
+                .WithMessage(EmailUsedBefore);
+
+            RuleFor(x => x)
+                .MustAsync(UserNameNotTakenBefore)
+                .WithMessage(UserNameUsedBefore);
         }
 
-        public async Task<bool> EmailTokenBefore(string email, CancellationToken cancellation)
+        public async Task<bool> EmailNotTakenBefore(UserModel userModel, CancellationToken cancellation)
         {
-            var user= await userManager.FindByEmailAsync(email);
-            if (user is null) return true;
-            return false; 
+            var user = await _userManager.FindByEmailAsync(userModel.Email);
+
+            return user is null || user.Id == userModel.Id;
         }
 
-        public async Task<bool> UserNameTokenBefore(string UserName, CancellationToken cancellation)
+        public async Task<bool> UserNameNotTakenBefore(UserModel userModel, CancellationToken cancellation)
         {
-            var user = await userManager.FindByNameAsync(UserName);
-            if (user is null) return true;
-            return false;
+            var user = await _userManager.FindByNameAsync(userModel.UserName);
+            return user is null || user.Id== userModel.Id;
         }
-
-
-
     }
 }

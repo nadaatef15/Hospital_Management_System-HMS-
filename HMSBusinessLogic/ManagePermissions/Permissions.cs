@@ -11,14 +11,14 @@ namespace HMSBusinessLogic.ManagePermissions
             {
                  $"{Permission}.{model}.Create",
                  $"{Permission}.{model}.View",
-                 $"{Permission}.{model}.Delete",
+                 $"{Permission}.{model}.DeleteRoleById",
                  $"{Permission}.{model}.Edit",
             };
         }
 
         public static List<string> GetAllPermissions()
         {
-            List<string> AllPermissions = new List<string>();
+            var AllPermissions = new List<string>();
 
             foreach (var model in Enum.GetValues(typeof(model)))
                 AllPermissions.AddRange(GetPermissionforModel(model.ToString()));

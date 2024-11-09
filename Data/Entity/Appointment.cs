@@ -6,7 +6,7 @@ namespace HMSDataAccess.Entity
     {
         public int Id { get; set; } 
 
-        public DateOnly Date {  get; set; }
+        public DateOnly Date {  get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
         public TimeOnly SartTime { get; set; }
 
@@ -16,10 +16,17 @@ namespace HMSDataAccess.Entity
 
         public Status Status { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
         public string DoctorId {  get; set; }   
-        public Doctor Doctor { get; set; }  
+
+        public DoctorEntity Doctor { get; set; }  
 
         public string PatientId {  get; set; }  
-        public Patient Patient { get; set; }    
+
+        public PatientEntity Patient { get; set; }
+
+      
+
     }
 }

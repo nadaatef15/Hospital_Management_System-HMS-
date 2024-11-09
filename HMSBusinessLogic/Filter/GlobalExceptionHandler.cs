@@ -6,7 +6,7 @@ using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
 
 namespace HMSBusinessLogic.Filter
 {
-    public class GlobalExceptionHandler :ExceptionFilterAttribute
+    public class GlobalExceptionHandler : ExceptionFilterAttribute
     {
         public override void OnException(ExceptionContext context)
         {
@@ -33,9 +33,8 @@ namespace HMSBusinessLogic.Filter
                 default:
                     statusCode = (int)HttpStatusCode.InternalServerError;
                     break;
-
-
             }
+
             var result = new ErrorResponse
             {
                 message = context.Exception.Message
@@ -47,7 +46,6 @@ namespace HMSBusinessLogic.Filter
                 DeclaredType = typeof(ErrorResponse),
             };
         }
-
 
         public class ErrorResponse
         {
