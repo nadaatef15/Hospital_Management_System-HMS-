@@ -1,5 +1,4 @@
 ﻿using HMSBusinessLogic.Manager.AccountManager;
-using HMSContracts.Email;
 using HMSContracts.Model.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,13 +8,10 @@ namespace Hospital_Management_System.Controllers
     public class AccountController : BaseController
     {
         private readonly IAccountManager _accountManager;
-        private readonly IEmail _emailSender;
-        public AccountController(IAccountManager accountManager, IEmail emailSender)
-        {
-            _accountManager = accountManager;
-            _emailSender = emailSender;
-        }
 
+        public AccountController(IAccountManager accountManager)=>
+            _accountManager = accountManager;
+           
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel loginModel)
@@ -32,22 +28,16 @@ namespace Hospital_Management_System.Controllers
             return Unauthorized();
         }
 
-        [HttpPost("Register")]
+        [HttpPost("RegisterDoctor")]
         public async Task<IActionResult> Register([FromForm] UserModel userModel)
         {
             await _accountManager.Register(userModel);
             return Created();
         }
 
-        //[HttpPost("SendingEmail")]
-        //public async Task<IActionResult> SendingEmail()
-        //{
-        //    await _emailSender.SendEmailAsync("sagdallrahman3@gmail.com", "This is test", "I am nada");
-        //    return Ok("SendSuccessfully");
-        //}
-
-
-        [HttpPatch("ChangePassword")]
+    
+        [HttpPatch]
+        [Route("ChangePassword/{Id}", Name = "ChangePassword")]
         public async Task<IActionResult> ChangePassword(string userId , ChangePasswordModel model)
         {
             await _accountManager.ChangePassword(userId, model);

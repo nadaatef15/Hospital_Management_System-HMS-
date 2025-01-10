@@ -6,8 +6,7 @@ namespace HMSContracts.Model.MedicalRecord
 {
     public class MedicalRecordModel
     {
-
-
+        public int? Id { get; set; } 
         [Required]
         public string Treatment { get; set; }
 

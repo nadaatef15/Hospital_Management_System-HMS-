@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using HMSBusinessLogic.Helpers.Mappers;
-using HMSBusinessLogic.Manager.AccountManager;
-using HMSBusinessLogic.Manager.IdentityManager;
+using HMSBusinessLogic.Manager.Identity;
+using HMSBusinessLogic.Resource;
 using HMSBusinessLogic.Services.GeneralServices;
 using HMSContracts.Constants;
 using HMSContracts.Model.Identity;
 using HMSContracts.Model.Users;
 using HMSDataAccess.Entity;
+using HMSDataAccess.Repo.Receptionist;
 using Microsoft.AspNetCore.Identity;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
 using static HMSContracts.Language.Resource;
@@ -14,8 +15,11 @@ namespace HMSBusinessLogic.Manager.Receptionist
 {
     public interface IReceptionistManager
     {
-        Task Register(ReceptionistModel user);
-        Task Update(string id, UserModel userModified);
+        Task<UserResource> RegisterReceptionist(ReceptionistModel user);
+        Task UpdateReceptionist(string id, ReceptionistModel userModified);
+        Task<UserResource> GetReceptionistById(string id);
+        Task<List<UserResource>> GetAllReceptionists();
+
 
     }
     public class ReceptionistManager : IReceptionistManager
@@ -24,83 +28,74 @@ namespace HMSBusinessLogic.Manager.Receptionist
         private readonly IValidator<UserModel> _validator;
         private readonly IFileService _fileService;
         private readonly IUserManager _userManager;
+        private readonly IReceptionistRepo _receptionistRepo;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public ReceptionistManager(UserManager<UserEntity> userManagerIdentity,
-            IValidator<UserModel> validator, IFileService fileService , IUserManager userManager)
+            IValidator<UserModel> validator, IFileService fileService,
+            IUserManager userManager, IReceptionistRepo receptionistRepo, RoleManager<IdentityRole> roleManager)
         {
             _userManagerIdentity = userManagerIdentity;
             _validator = validator;
             _fileService = fileService;
             _userManager = userManager;
+            _receptionistRepo = receptionistRepo;
+            _roleManager = roleManager;
         }
 
-        public async Task Register(ReceptionistModel user)
+        public async Task<UserResource> RegisterReceptionist(ReceptionistModel user)
         {
             await _validator.ValidateAndThrowAsync(user);
 
-            var reseptionistEntity = user.ToReceptionistEntity();
+            if (! await _roleManager.RoleExistsAsync(SysConstants.Receptionist))
+                throw new NotFoundException(RoleReceptionistDoesNotExist);
+
+            var receptionistEntity = user.ToEntity();
 
             if (user.Image is not null)
-                reseptionistEntity.ImagePath = await _fileService.UploadImage(user.Image);
+                receptionistEntity.ImagePath = await _fileService.UploadImage(user.Image);
 
-            var result = await _userManagerIdentity.CreateAsync(reseptionistEntity, user.Password);
+                var result = await _userManagerIdentity.CreateAsync(receptionistEntity, user.Password);
 
-            if (!result.Succeeded)
-            {
-                var errors = string.Join(Environment.NewLine, result.Errors);
-                throw new ValidationException(errors);
-            }
-            await _userManagerIdentity.AddToRoleAsync(reseptionistEntity, SysConstants.Receptionist);
+                if (!result.Succeeded)
+                {
+                    var errors = string.Join(Environment.NewLine, result.Errors);
+                    throw new ValidationException(errors);
+                }
+                
+            
+            await _userManagerIdentity.AddToRoleAsync(receptionistEntity, SysConstants.Receptionist);
+            
+            return receptionistEntity.ToResource();
 
         }
 
-        #region Update
-        //public async Task Update(string ReceptionistId, ModifyUser userModified)
-        //{
-        //    var receptionist = await _userManagerIdentity.FindByIdAsync(ReceptionistId);
 
-        //    if (receptionist is null)
-        //        throw new NotFoundException(UseDoesnotExist);
-
-
-        //    //if the the email or the name is used before in the application
-
-        //    var userByEmail = await _userManagerIdentity.FindByEmailAsync(userModified.Email);
-        //    var userByUserName = await _userManagerIdentity.FindByNameAsync(userModified.UserName);
-
-        //    if (userByUserName.Id != receptionist.Id || userByEmail.Id != receptionist.Id)
-        //        throw new ConflictException("The UserName or Email is used before");
-
-        //    else
-        //    {
-        //        receptionist.PhoneNumber = userModified.Phone;
-        //        receptionist.Address = userModified.Address;
-        //        receptionist.Age = userModified.Age;
-        //        receptionist.UserName = userModified.UserName;
-        //        receptionist.Email = userModified.Email;
-
-        //        if (userModified.Image is not null)
-        //            receptionist.ImagePath = await _fileService.UploadImage(userModified.Image);
-        //    }
-        //    var result = await _userManagerIdentity.UpdateAsync(receptionist);
-
-        //    if (!result.Succeeded)
-        //    {
-        //        var errors = string.Join(Environment.NewLine, result.Errors);
-        //        throw new ValidationException(errors);
-        //    }
-        //}
-        #endregion
-        public async Task Update(string id, UserModel userModified)
+        public async Task UpdateReceptionist(string id, ReceptionistModel userModified)
         {
+
             if (userModified.Id != id)
                 throw new ConflictException(NotTheSameId);
+
+            await _validator.ValidateAndThrowAsync(userModified);
 
             var user = await _userManagerIdentity.FindByIdAsync(id) ??
                  throw new NotFoundException(UseDoesnotExist);
 
             await _userManager.UpdateUser(user, userModified);
         }
+
+        public async Task<UserResource> GetReceptionistById(string id)
+        {
+            var recep = await _receptionistRepo.GetReceptionistByIdAsNoTracking(id) ??
+                throw new NotFoundException(UseDoesnotExist);
+
+            return recep.ToResource();
+        }
+
+        public async Task<List<UserResource>> GetAllReceptionists() =>
+            (await _receptionistRepo.GetAllReceptionist()).Select(a => a.ToResource()).ToList();
+
 
     }
 }

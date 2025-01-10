@@ -1,4 +1,4 @@
-﻿using Data.Entity;
+﻿using HMSDataAccess.DBContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

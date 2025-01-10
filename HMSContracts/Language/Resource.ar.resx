@@ -117,20 +117,68 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="appointmentDoesnotExist" xml:space="preserve">
+    <value>هذا المعاد غير موجود</value>
+  </data>
+  <data name="DochasScheduleInThisDate" xml:space="preserve">
+    <value>الطبيب لديه جدول ف هذا التاريخ</value>
+  </data>
   <data name="EmailNotFound" xml:space="preserve">
     <value>هذا البريد الإلكتروني غير موجود</value>
   </data>
   <data name="EmailUsedBefore" xml:space="preserve">
     <value>تم استخدام هذا البريد الإلكتروني من قبل</value>
   </data>
+  <data name="invalidAppointment" xml:space="preserve">
+    <value>هذا المعاد مستخدم في تقرير طبي لا يمكنك حذفه</value>
+  </data>
+  <data name="MedicalRecordDoesnotExist" xml:space="preserve">
+    <value>هذا التقرير الطبي غير موجود</value>
+  </data>
+  <data name="MRDeleted" xml:space="preserve">
+    <value>هذا التقرير الطبي محذوف</value>
+  </data>
   <data name="MustUpload" xml:space="preserve">
     <value>يجب عليك تحميل ملف أو توفير مسار الصورة.</value>
+  </data>
+  <data name="NotTheSameId" xml:space="preserve">
+    <value>ليس نفس الرقم التعريفي</value>
+  </data>
+  <data name="NoUsers" xml:space="preserve">
+    <value>ليس هناك مستخدمين</value>
+  </data>
+  <data name="patientDoesnotHasThisAppointment" xml:space="preserve">
+    <value>المريض لا يمتلك هذا المعاد</value>
+  </data>
+  <data name="pharmDoesnotExist" xml:space="preserve">
+    <value>الصيدلي غير موجود</value>
+  </data>
+  <data name="RoleDoctorDoesNotExist" xml:space="preserve">
+    <value>دور الطبيب غير موجود</value>
   </data>
   <data name="RoleDoesnotExist" xml:space="preserve">
     <value>هذا الدور غير موجود</value>
   </data>
   <data name="RoleIsExist" xml:space="preserve">
     <value>الدور موجود بالفعل</value>
+  </data>
+  <data name="RoleLabTechDoesNotExist" xml:space="preserve">
+    <value>دور طبيب المختبر عير موجود</value>
+  </data>
+  <data name="RolePatientDoesNotExist" xml:space="preserve">
+    <value>دور المريض غير موجود</value>
+  </data>
+  <data name="RolePharmacistDoesNotExist" xml:space="preserve">
+    <value>دور الصيديلي غير موجود</value>
+  </data>
+  <data name="RoleReceptionistDoesNotExist" xml:space="preserve">
+    <value>دور  الريسيبشن غير موجود</value>
+  </data>
+  <data name="ScheduleIsNotExist" xml:space="preserve">
+    <value>هذا الجدول غير موجود</value>
+  </data>
+  <data name="UsedBefore" xml:space="preserve">
+    <value>اسم المستخدم او الايميل الخاص به ليس موجود</value>
   </data>
   <data name="UseDoesnotExist" xml:space="preserve">
     <value>هذا المستخدم غير موجود</value>
@@ -143,5 +191,26 @@
   </data>
   <data name="WrongPassword" xml:space="preserve">
     <value>كلمة المرور غير صحيحة</value>
+  </data>
+  <data name="DocHasSpecialty" xml:space="preserve">
+    <value>هذا الطبيب لديه هذا التخصص</value>
+  </data>
+  <data name="NameIsNotCorrect" xml:space="preserve">
+    <value>ادخل اسم التخصص</value>
+  </data>
+  <data name="NoSpecialtyForDoctor" xml:space="preserve">
+    <value>لا يوجد تخصص لهذا الطبيب</value>
+  </data>
+  <data name="SpecialityIsExist" xml:space="preserve">
+    <value>هذا التخصص موجود</value>
+  </data>
+  <data name="SpecialityIsNotExist" xml:space="preserve">
+    <value>هذا التخصص غير موجود</value>
+  </data>
+  <data name="IsNotADoctor" xml:space="preserve">
+    <value>هذا المستخدم ليس طبيب</value>
+  </data>
+  <data name="IsNotAPatient" xml:space="preserve">
+    <value>هذا المستخدم ليس مريض</value>
   </data>
 </root>

@@ -21,6 +21,5 @@
             public UnauthorizedException(string message) : base(message) { }
         }
 
-
     }
 }

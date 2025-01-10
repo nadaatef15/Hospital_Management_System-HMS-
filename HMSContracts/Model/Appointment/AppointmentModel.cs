@@ -7,10 +7,14 @@ namespace HMSContracts.Model.Appointment
 {
     public class AppointmentModel
     {
+        public int Id { get; set; }
+        [Required]
+        [DateNotInThePast]
+        public DateOnly Date { get; set; }
 
-        [Required(ErrorMessage ="the format is HH:MM:SS")]
-        [SwaggerSchema(Format = "time", Description = "Time in HH:mm:ss format" )]
-        public TimeOnly SartTime { get; set; }
+        [Required(ErrorMessage = "the format is HH:MM:SS")]
+        [SwaggerSchema(Format = "time", Description = "Time in HH:mm:ss format")]
+        public TimeOnly StartTime { get; set; }
 
         [Required(ErrorMessage = "the format is HH:MM:SS")]
         [SwaggerSchema(Format = "time", Description = "Time in HH:mm:ss format")]

@@ -1,5 +1,5 @@
 ﻿using HMSBusinessLogic.Manager.Doctor;
-using HMSContracts.Model.Identity;
+using HMSBusinessLogic.Resource;
 using HMSContracts.Model.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,24 +8,48 @@ namespace Hospital_Management_System.Controllers
     public class DoctorController : BaseController
     {
         private readonly IDoctorManager _doctorManager;
-        public DoctorController(IDoctorManager doctorManager)
-        {
+        public DoctorController(IDoctorManager doctorManager)=>
             _doctorManager = doctorManager;
+        
+        [HttpPost (Name = "RegisterDoctor")]
+        [ProducesResponseType(typeof(DoctorResource), StatusCodes.Status201Created)]
+        public async Task<IActionResult> RegisterDoctor([FromForm] DoctorModel user)
+        {
+           var doctor= await  _doctorManager.RegisterDoctor(user);
+            return CreatedAtAction(nameof(GetDoctorById), new { id = doctor.Id.ToString() }, doctor);
+           
         }
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromForm] DoctorModel user)
+        [HttpPut("Id", Name = "UpdateDoctor")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateDoctor(string id, [FromForm] DoctorModel user)
         {
-            await  _doctorManager.Register(user);
-            return Created();
+            await _doctorManager.UpdateDoctor(id,user);
+            return NoContent();
         }
 
-
-        [HttpPut("Update")]
-        public async Task<IActionResult> Update(string id, [FromForm] ModifiedDoctor user)
+        [HttpGet("id" , Name = "GetDoctorById")]
+        [ProducesResponseType(typeof(DoctorResource), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDoctorById(string id)
         {
-            await _doctorManager.Update(id,user);
-            return Ok();
+          var doctor= await _doctorManager.GetDoctorById(id);
+            return Ok(doctor);
+        }
+
+        [HttpGet(Name = "GetAllDoctors")]
+        [ProducesResponseType(typeof(List<DoctorResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllDoctors()
+        {
+            var doctor = await _doctorManager.GetAllDoctors();
+            return Ok(doctor);
+        }
+
+        [HttpDelete("Id",Name ="DeleteDoctor")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteDoctor(string docId)
+        {
+            await _doctorManager.DeleteDoctor(docId);
+            return NoContent();
         }
     }
 }

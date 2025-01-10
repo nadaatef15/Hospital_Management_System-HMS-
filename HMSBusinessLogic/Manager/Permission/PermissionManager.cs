@@ -23,10 +23,11 @@ namespace HMSBusinessLogic.Manager.PermissionManager
         public async Task<List<PermissionModel>> GetpermissionsOfRole(string roleId)
         {
             var role = await _roleManager.FindByIdAsync(roleId);
-            var permissionModels = new List<PermissionModel>();
 
             if (role is null)
                 throw new NotFoundException(RoleDoesnotExist);
+
+            var permissionModels = new List<PermissionModel>();
 
             var allClaims = _roleManager.GetClaimsAsync(role).Result
                     .Where(a => a.Type == Permission)
@@ -66,23 +67,25 @@ namespace HMSBusinessLogic.Manager.PermissionManager
             if (role is null)
                 throw new NotFoundException(RoleDoesnotExist);
 
+            var existingClaims = (await _roleManager.GetClaimsAsync(role))
+                        .Where(a => a.Type == Permission)
+                        .ToList();
 
-            (await _roleManager.GetClaimsAsync(role))
-                    .Where(a => a.Type == Permission)
-                    .ToList()
-                    .ForEach(async claim =>
-                    {
-                        await _roleManager.RemoveClaimAsync(role, claim);
-                    });
-
-            permissionModels.ForEach(async model =>
+            foreach (var claim in existingClaims)
             {
+               await  _roleManager.RemoveClaimAsync(role, claim);
+            };
 
-                if (model.isSelected == true)
+
+            foreach (var model in permissionModels)
+            {
+                if (model.isSelected)
                 {
-                    await _roleManager.AddClaimAsync(role, new System.Security.Claims.Claim(Permission, $"{Permission}.{model.Model}.{model.PermissionType}"));
+                 await  _roleManager.AddClaimAsync(role,
+                        new System.Security.Claims.Claim(Permission, $"{Permission}.{model.Model}.{model.PermissionType}"));
                 }
-            });
+            }
+
         }
     }
 }

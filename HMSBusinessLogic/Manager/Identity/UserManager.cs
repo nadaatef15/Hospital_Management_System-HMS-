@@ -2,6 +2,7 @@
 using HMSBusinessLogic.Helpers.Mappers;
 using HMSBusinessLogic.Resource;
 using HMSBusinessLogic.Services.GeneralServices;
+using HMSBusinessLogic.Services.user;
 using HMSContracts.Model.Identity;
 using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
 using static HMSContracts.Language.Resource;
 
-namespace HMSBusinessLogic.Manager.IdentityManager
+namespace HMSBusinessLogic.Manager.Identity
 {
     public interface IUserManager
     {
@@ -25,16 +26,16 @@ namespace HMSBusinessLogic.Manager.IdentityManager
     {
         private readonly UserManager<UserEntity> _userManager;
         private readonly IFileService _fileService;
-        private readonly IValidator<UserModel> _validator;
+        private readonly IUserService _userEntitiesUpdateService;
 
         public UserManager(UserManager<UserEntity> userManagerIdentity,
             IFileService fileService,
-            IValidator<UserModel> validator
+            IUserService userEntitiesUpdateService
            )
         {
             _userManager = userManagerIdentity;
             _fileService = fileService;
-            _validator = validator; 
+            _userEntitiesUpdateService = userEntitiesUpdateService;
         }
 
         public async Task AssignRolesToUser(string userId, List<string> roleNames)
@@ -60,37 +61,26 @@ namespace HMSBusinessLogic.Manager.IdentityManager
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user is null || user.isDeleted == true)
+            if (user is null || user.IsDeleted == true)
                 throw new NotFoundException(UseDoesnotExist);
-           
+
             return user.ToResource();
         }
 
         public async Task DeleteUser(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId)??
+                   throw new NotFoundException(UseDoesnotExist);
 
-            if (user is null)
-                throw new NotFoundException(UseDoesnotExist);
-
-            //await _userManagerIdentity.DeleteAsync(user);
-            user.isDeleted = true;
-            await _userManager.UpdateAsync(user);
+            await _userManager.DeleteAsync(user);
         }
 
         public async Task UpdateUser(UserEntity user, UserModel userModified)
         {
-            await _validator.ValidateAndThrowAsync(userModified);
+            _userEntitiesUpdateService.SetValues(user, userModified);   
 
-                user.PhoneNumber = userModified.Phone;
-                user.Address = userModified.Address;
-                user.Age = userModified.Age;
-                user.UserName = userModified.UserName;
-                user.Email = userModified.Email;
-
-                if (userModified.Image is not null)
-                    user.ImagePath = await _fileService.UploadImage(userModified.Image);
-            
+            if (userModified.Image is not null)
+                user.ImagePath = await _fileService.UploadImage(userModified.Image);
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
@@ -100,13 +90,9 @@ namespace HMSBusinessLogic.Manager.IdentityManager
             }
         }
 
-        public async Task<List<UserResource>> GetAllUsers()
-        {
-
-            var users = await _userManager.Users.ToListAsync();
-
-            return users.Where(a => a.isDeleted == false).Select(x => x.ToResource()).ToList();
-        }
+        public async Task<List<UserResource>> GetAllUsers()=>
+             await _userManager.Users.Select(x => x.ToResource()).ToListAsync();
+        
 
 
 

@@ -1,8 +1,10 @@
-﻿using HMSBusinessLogic.Helpers.Mappers;
-using HMSContracts.Model.Appointment;
+﻿using FluentValidation;
+using HMSBusinessLogic.Helpers.Mappers;
+using HMSBusinessLogic.Resource;
+using HMSBusinessLogic.Services.MedicalRecord;
 using HMSContracts.Model.MedicalRecord;
 using HMSDataAccess.Entity;
-using HMSDataAccess.Repo;
+using HMSDataAccess.Repo.MedicalRecord;
 using Microsoft.AspNetCore.Identity;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
 using static HMSContracts.Language.Resource;
@@ -12,74 +14,90 @@ namespace HMSBusinessLogic.Manager.MedicalRecord
 {
     public interface IMedicalRecordManager
     {
-        Task CreateMR(MedicalRecordModel model);
-        Task Delete(int id);
-        Task Update(int MRId, MedicalRecordModel model);
-        Task<MedicalRecordModel> GetById(int id);
-        List<MedicalRecordModel> GetAll();
-
+        Task CreateMedicalRecord(MedicalRecordModel model);
+        Task DeleteMedicalRecord(int id);
+        Task UpdateMedicalRecord(int Id, MedicalRecordModel model);
+        Task<MedicalRecordResource> GetMedicalRecordById(int id);
+        Task<List<MedicalRecordResource>> GetAllMedicalRecords();
     }
     public class MedicalRecordManager : IMedicalRecordManager
     {
         private readonly IMedicalRecordREpo _medicalRecordRepo;
         private readonly UserManager<UserEntity> _userManager;
+        private readonly IValidator<MedicalRecordModel> _validator;
+        private readonly IMedicalRecordService _medicalRecordUpdateService;
 
         public MedicalRecordManager(IMedicalRecordREpo medicalRecordRepo,
-            UserManager<UserEntity> userManager
-
+            UserManager<UserEntity> userManager ,
+            IValidator<MedicalRecordModel> validators ,
+            IMedicalRecordService medicalRecordUpdateService
             )
         {
             _medicalRecordRepo = medicalRecordRepo;
             _userManager = userManager;
+            _validator = validators;
+            _medicalRecordUpdateService = medicalRecordUpdateService;
         }
 
 
-        public async Task CreateMR(MedicalRecordModel model)
+        public async Task CreateMedicalRecord(MedicalRecordModel model)
         {
-            var doc = await _userManager.FindByIdAsync(model.DoctorId);
-            var patient = await _userManager.FindByIdAsync(model.PatientId);
+            await _validator.ValidateAndThrowAsync(model);
 
-            if (doc is null || patient is null)
-                throw new NotFoundException(UseDoesnotExist);
-
-            var medicalRecord = model.ToMedicalRecord();
+            var medicalRecord = model.ToEntity();
 
             await _medicalRecordRepo.CreateMedicalRecord(medicalRecord);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteMedicalRecord(int id)
         {
-            await _medicalRecordRepo.Delete(id);
+           var result= await _medicalRecordRepo.GetMedicalRecordByIdNoTracking(id) ??
+                  throw new NotFoundException(MedicalRecordDoesnotExist);
+
+            await _medicalRecordRepo.DeleteMedicalRecord(result);
         }
 
-        public async Task Update(int MRId, MedicalRecordModel model)
+        public async Task UpdateMedicalRecord(int id, MedicalRecordModel model)
         {
+            if (id != model.Id)
+                throw new ConflictException(NotTheSameId);
 
-            var doc = await _userManager.FindByIdAsync(model.DoctorId);
-            var patient = await _userManager.FindByIdAsync(model.PatientId);
+            await _validator.ValidateAndThrowAsync(model);
 
-            if (doc is null || patient is null)
-                throw new NotFoundException(UseDoesnotExist);
+            var medicalRecordEntity = await _medicalRecordRepo.GetMedicalRecordByIdTracking(id) ??
+                   throw new NotFoundException(MedicalRecordDoesnotExist);
 
-            var medicalRecord = model.ToMedicalRecord();
+            _medicalRecordUpdateService.SetValues(medicalRecordEntity, model);
 
-            await _medicalRecordRepo.Update(MRId, medicalRecord);
+            await _medicalRecordRepo.SaveChanges();
         }
 
-        public async Task<MedicalRecordModel> GetById(int id)
+        public async Task UpdateMedicalRecord2(int id, MedicalRecordModel model)
         {
-            var MR = await _medicalRecordRepo.GetById(id);
-            return MR.ToMRModel();        
+            if (id != model.Id)
+                throw new ConflictException(NotTheSameId);
+
+            await _validator.ValidateAndThrowAsync(model);
+
+            var medicalRecordEntity = await _medicalRecordRepo.GetMedicalRecordByIdNoTracking(id) ??
+                   throw new NotFoundException(MedicalRecordDoesnotExist);
+
+            _medicalRecordUpdateService.SetValues(medicalRecordEntity, model);
+
+            await _medicalRecordRepo.UpdateMedicalRecord(medicalRecordEntity);
         }
 
-
-        public List<MedicalRecordModel> GetAll()
+        public async Task<MedicalRecordResource> GetMedicalRecordById(int id)
         {
-            var result = _medicalRecordRepo.GetAll();
-            List<MedicalRecordModel> models = new();
-            result.ForEach(a => models.Add(a.ToMRModel()));
-            return models;
+            var medicalRecord = await _medicalRecordRepo.GetMedicalRecordByIdNoTracking(id) ??
+                throw new NotFoundException(MedicalRecordDoesnotExist);
+
+            return medicalRecord.ToResource();        
         }
+
+        public async Task< List<MedicalRecordResource>> GetAllMedicalRecords()=>
+            (await _medicalRecordRepo.GetAllMedicalRecords()).Select(a =>a.ToResource()).ToList();
+
     }
 
 }

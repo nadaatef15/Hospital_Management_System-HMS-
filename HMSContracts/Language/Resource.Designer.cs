@@ -70,6 +70,24 @@ namespace HMSContracts.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Doctor has already Schedule in the same Date.
+        /// </summary>
+        public static string DochasScheduleInThisDate {
+            get {
+                return ResourceManager.GetString("DochasScheduleInThisDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Doctor Already has this Specialty.
+        /// </summary>
+        public static string DocHasSpecialty {
+            get {
+                return ResourceManager.GetString("DocHasSpecialty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This Email does not exist.
         /// </summary>
         public static string EmailNotFound {
@@ -97,7 +115,25 @@ namespace HMSContracts.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The appointment does not exist.
+        ///   Looks up a localized string similar to This User is not a Doctor.
+        /// </summary>
+        public static string IsNotADoctor {
+            get {
+                return ResourceManager.GetString("IsNotADoctor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to this user is not a patient.
+        /// </summary>
+        public static string IsNotAPatient {
+            get {
+                return ResourceManager.GetString("IsNotAPatient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The medicalRecord does not exist.
         /// </summary>
         public static string MedicalRecordDoesnotExist {
             get {
@@ -124,6 +160,24 @@ namespace HMSContracts.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a name for Specialty.
+        /// </summary>
+        public static string NameIsNotCorrect {
+            get {
+                return ResourceManager.GetString("NameIsNotCorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no Specialties for the Doctor.
+        /// </summary>
+        public static string NoSpecialtyForDoctor {
+            get {
+                return ResourceManager.GetString("NoSpecialtyForDoctor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The id is not the same .
         /// </summary>
         public static string NotTheSameId {
@@ -133,11 +187,38 @@ namespace HMSContracts.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no users.
+        /// </summary>
+        public static string NoUsers {
+            get {
+                return ResourceManager.GetString("NoUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to patient does not has this appointment.
         /// </summary>
         public static string patientDoesnotHasThisAppointment {
             get {
                 return ResourceManager.GetString("patientDoesnotHasThisAppointment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The pharmacist does not exist.
+        /// </summary>
+        public static string pharmDoesnotExist {
+            get {
+                return ResourceManager.GetString("pharmDoesnotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role Doctor Does Not Exist.
+        /// </summary>
+        public static string RoleDoctorDoesNotExist {
+            get {
+                return ResourceManager.GetString("RoleDoctorDoesNotExist", resourceCulture);
             }
         }
         
@@ -160,11 +241,56 @@ namespace HMSContracts.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Role LabTechnician Does Not Exist.
         /// </summary>
-        public static string String1 {
+        public static string RoleLabTechDoesNotExist {
             get {
-                return ResourceManager.GetString("String1", resourceCulture);
+                return ResourceManager.GetString("RoleLabTechDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role Patient Does Not Exist.
+        /// </summary>
+        public static string RolePatientDoesNotExist {
+            get {
+                return ResourceManager.GetString("RolePatientDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role Pharmacist Does Not Exist.
+        /// </summary>
+        public static string RolePharmacistDoesNotExist {
+            get {
+                return ResourceManager.GetString("RolePharmacistDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role Receptionist Does Not Exist.
+        /// </summary>
+        public static string RoleReceptionistDoesNotExist {
+            get {
+                return ResourceManager.GetString("RoleReceptionistDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Speciality is Exist.
+        /// </summary>
+        public static string SpecialityIsExist {
+            get {
+                return ResourceManager.GetString("SpecialityIsExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to this Speciality Is Not Exist.
+        /// </summary>
+        public static string SpecialityIsNotExist {
+            get {
+                return ResourceManager.GetString("SpecialityIsNotExist", resourceCulture);
             }
         }
         

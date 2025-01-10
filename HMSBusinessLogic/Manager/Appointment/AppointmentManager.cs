@@ -1,10 +1,9 @@
-﻿using Data.Entity;
+﻿using FluentValidation;
 using HMSBusinessLogic.Helpers.Mappers;
+using HMSBusinessLogic.Resource;
+using HMSBusinessLogic.Services.Appointment;
 using HMSContracts.Model.Appointment;
-using HMSContracts.Model.MedicalRecord;
-using HMSDataAccess.Entity;
-using HMSDataAccess.Repo;
-using Microsoft.AspNetCore.Identity;
+using HMSDataAccess.Repo.Appointment;
 using static HMSContracts.Infrastructure.Exceptions.TypesOfExceptions;
 using static HMSContracts.Language.Resource;
 
@@ -12,51 +11,69 @@ namespace HMSBusinessLogic.Manager.Appointment
 {
     public interface IAppointmentManager
     {
-       Task CreateAppointment(AppointmentModel model);
-       Task Delete(int id);
-       Task<AppointmentModel> GetById(int id);
-       List<AppointmentModel> GetAll();
+        Task CreateAppointment(AppointmentModel model);
+        Task DeleteAppointment(int id);
+        Task<AppointmentResource> GetAppointmentById(int id);
+        Task<List<AppointmentResource>> GetAllAppointments();
     }
     public class AppointmentManager : IAppointmentManager
     {
         private readonly IAppointmentRepo _appointmentRepo;
-        private readonly UserManager<UserEntity> _userManager;
-        public AppointmentManager(IAppointmentRepo appointmentRepo , UserManager<UserEntity> userManager)
+        private readonly IAppointmentService _appointmentUpdateService;
+        private readonly IValidator<AppointmentModel> _validator;
+
+        public AppointmentManager(IAppointmentRepo appointmentRepo,
+            IAppointmentService appointmentUpdateService,
+            IValidator<AppointmentModel> validator
+            )
         {
-            _appointmentRepo= appointmentRepo;
-            _userManager= userManager;
+            _appointmentRepo = appointmentRepo;
+            _appointmentUpdateService = appointmentUpdateService;
+            _validator = validator;
         }
 
         public async Task CreateAppointment(AppointmentModel model)
         {
-            var doc = await _userManager.FindByIdAsync(model.DoctorId);
-            var patient = await _userManager.FindByIdAsync(model.PatientId);
+            await _validator.ValidateAndThrowAsync(model);
 
-            if (doc is null || patient is null)
-                throw new NotFoundException(UseDoesnotExist);
+            var appointment = model.ToEntity();
 
-            var appointment = model.ToAppointment();
-
-            await _appointmentRepo.CreatAppointment(appointment);
+            await _appointmentRepo.CreateAppointment(appointment);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAppointment(int id)
         {
-            await _appointmentRepo.Delete(id);
+            var appointment = await _appointmentRepo.GetAppointmentByIdAsNoTracking(id) ??
+                  throw new NotFoundException(appointmentDoesnotExist);
+
+            await _appointmentRepo.DeleteAppointment(appointment);
         }
 
-        public async Task<AppointmentModel> GetById(int id)
+        public async Task UpdateAppointment(int id, AppointmentModel model)
         {
-            var appointment = await _appointmentRepo.GetById(id);
-            return appointment.ToAppointmentModel(); 
+            if (id != model.Id)
+                throw new ConflictException(NotTheSameId);
+
+            await _validator.ValidateAndThrowAsync(model);
+
+            var appointmentEntity = await _appointmentRepo.GetAppointmentById(id) ??
+                   throw new NotFoundException(appointmentDoesnotExist);
+
+            _appointmentUpdateService.SetValues(appointmentEntity, model);
+
+            await _appointmentRepo.saveChanges();
         }
 
-        public List<AppointmentModel> GetAll()
+        public async Task<AppointmentResource> GetAppointmentById(int id)
         {
-            var result = _appointmentRepo.GetAll();
-            List<AppointmentModel> appointmentModels = new();
-            result.ForEach(a => appointmentModels.Add(a.ToAppointmentModel()));
-            return appointmentModels;
+            var appointment = await _appointmentRepo.GetAppointmentByIdAsNoTracking(id) ??
+                   throw new NotFoundException(appointmentDoesnotExist);
+
+            return appointment.ToResource();
         }
+
+        public async Task<List<AppointmentResource>> GetAllAppointments() =>
+          (await _appointmentRepo.GetAllAppointments()).Select(a => a.ToResource()).ToList();
+
     }
 }

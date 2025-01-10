@@ -9,10 +9,10 @@ namespace HMSBusinessLogic.ManagePermissions
         {
             return new List<string>()
             {
-                 $"{Permission}.{model}.Create",
-                 $"{Permission}.{model}.View",
-                 $"{Permission}.{model}.DeleteRoleById",
-                 $"{Permission}.{model}.Edit",
+                 $"{Permission}.{model}.{Create}",
+                 $"{Permission}.{model}.{View}",
+                 $"{Permission}.{model}.{Delete}",
+                 $"{Permission}.{model}.{Edit}",
             };
         }
 

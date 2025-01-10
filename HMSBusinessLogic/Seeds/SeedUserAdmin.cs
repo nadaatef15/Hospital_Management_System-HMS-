@@ -20,7 +20,9 @@ namespace HMSBusinessLogic.Seeds
                 Address = "Kafr",
                 Age = 25,
                 Gender = Gender.M,
-                ImagePath = "1.jpg",
+                IsDeleted=false,
+                CreatedOn=DateTime.Now,
+                CreatedBy="Program",
 
             };
 

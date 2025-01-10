@@ -7,8 +7,12 @@
         public const string Receptionist = "Receptionist";
         public const string Patient = "Patient";
         public const string Admin = "Admin";
-        public const string Pharmasist = "Pharmasist";
+        public const string Pharmacist = "Pharmacist";
         public const string LabTechnician = "LabTechnician";
+        public const string Create = "Create";
+        public const string Edit = "Edit";
+        public const string View = "View";
+        public const string Delete = "Delete";
 
     }
 }

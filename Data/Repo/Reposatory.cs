@@ -1,4 +1,4 @@
-﻿using Data.Entity;
+﻿using HMSDataAccess.DBContext;
 
 namespace HMSDataAccess.Repo
 {

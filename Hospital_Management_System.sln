@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HMSBusinessLogic", "HMSBusi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HMSContracts", "HMSContracts\HMSContracts.csproj", "{CE4BFD2D-60D1-4C35-814F-F94FECDB7D38}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{A59EDBF8-1BD7-4189-9FF2-933911F45A4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMSUnitTest", "Test\HMSUnitTest\HMSUnitTest.csproj", "{28B81172-24E9-459B-8BA5-C56AA11AB40B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +37,16 @@ Global
 		{CE4BFD2D-60D1-4C35-814F-F94FECDB7D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE4BFD2D-60D1-4C35-814F-F94FECDB7D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE4BFD2D-60D1-4C35-814F-F94FECDB7D38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28B81172-24E9-459B-8BA5-C56AA11AB40B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28B81172-24E9-459B-8BA5-C56AA11AB40B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28B81172-24E9-459B-8BA5-C56AA11AB40B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28B81172-24E9-459B-8BA5-C56AA11AB40B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{28B81172-24E9-459B-8BA5-C56AA11AB40B} = {A59EDBF8-1BD7-4189-9FF2-933911F45A4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94F1B15C-F467-4704-B21B-EC479FDA6AE3}

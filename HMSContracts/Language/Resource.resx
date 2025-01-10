@@ -120,6 +120,9 @@
   <data name="appointmentDoesnotExist" xml:space="preserve">
     <value>The appointment does not exist</value>
   </data>
+  <data name="DochasScheduleInThisDate" xml:space="preserve">
+    <value>The Doctor has already Schedule in the same Date</value>
+  </data>
   <data name="EmailNotFound" xml:space="preserve">
     <value>This Email does not exist</value>
   </data>
@@ -130,7 +133,7 @@
     <value>This Appointment is used in MedicalRecord You can not delete it</value>
   </data>
   <data name="MedicalRecordDoesnotExist" xml:space="preserve">
-    <value>The appointment does not exist</value>
+    <value>The medicalRecord does not exist</value>
   </data>
   <data name="MRDeleted" xml:space="preserve">
     <value>This Medical Record is deleted</value>
@@ -141,8 +144,17 @@
   <data name="NotTheSameId" xml:space="preserve">
     <value>The id is not the same </value>
   </data>
+  <data name="NoUsers" xml:space="preserve">
+    <value>There are no users</value>
+  </data>
   <data name="patientDoesnotHasThisAppointment" xml:space="preserve">
     <value>patient does not has this appointment</value>
+  </data>
+  <data name="pharmDoesnotExist" xml:space="preserve">
+    <value>The pharmacist does not exist</value>
+  </data>
+  <data name="RoleDoctorDoesNotExist" xml:space="preserve">
+    <value>Role Doctor Does Not Exist</value>
   </data>
   <data name="RoleDoesnotExist" xml:space="preserve">
     <value>This role doesn't exist</value>
@@ -150,8 +162,20 @@
   <data name="RoleIsExist" xml:space="preserve">
     <value>The role is already exist</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="RoleLabTechDoesNotExist" xml:space="preserve">
+    <value>Role LabTechnician Does Not Exist</value>
+  </data>
+  <data name="RolePatientDoesNotExist" xml:space="preserve">
+    <value>Role Patient Does Not Exist</value>
+  </data>
+  <data name="RolePharmacistDoesNotExist" xml:space="preserve">
+    <value>Role Pharmacist Does Not Exist</value>
+  </data>
+  <data name="RoleReceptionistDoesNotExist" xml:space="preserve">
+    <value>Role Receptionist Does Not Exist</value>
+  </data>
+  <data name="ScheduleIsNotExist" xml:space="preserve">
+    <value>This Schedule is not Exist</value>
   </data>
   <data name="UsedBefore" xml:space="preserve">
     <value>The UserName or Email is used before</value>
@@ -167,5 +191,26 @@
   </data>
   <data name="WrongPassword" xml:space="preserve">
     <value>The password is not Correct</value>
+  </data>
+  <data name="DocHasSpecialty" xml:space="preserve">
+    <value>Doctor Already has this Specialty</value>
+  </data>
+  <data name="NameIsNotCorrect" xml:space="preserve">
+    <value>Enter a name for Specialty</value>
+  </data>
+  <data name="NoSpecialtyForDoctor" xml:space="preserve">
+    <value>There is no Specialties for the Doctor</value>
+  </data>
+  <data name="SpecialityIsExist" xml:space="preserve">
+    <value>This Speciality is Exist</value>
+  </data>
+  <data name="SpecialityIsNotExist" xml:space="preserve">
+    <value>this Speciality Is Not Exist</value>
+  </data>
+  <data name="IsNotADoctor" xml:space="preserve">
+    <value>This User is not a Doctor</value>
+  </data>
+  <data name="IsNotAPatient" xml:space="preserve">
+    <value>this user is not a patient</value>
   </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using HMSBusinessLogic.Manager.MedicalRecord;
+using HMSBusinessLogic.Resource;
 using HMSContracts.Model.MedicalRecord;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,45 +8,48 @@ namespace Hospital_Management_System.Controllers
     public class MedicalRecordController : BaseController
     {
         private readonly IMedicalRecordManager _medicalRecordManager;
-        public MedicalRecordController(IMedicalRecordManager medicalRecordManager)
+        public MedicalRecordController(IMedicalRecordManager medicalRecordManager) =>
+            _medicalRecordManager = medicalRecordManager;
+
+
+        [HttpPost(Name = "CreateMedicalRecord")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateMedicalRecord([FromBody] MedicalRecordModel model)
         {
-            _medicalRecordManager=medicalRecordManager;
+            await _medicalRecordManager.CreateMedicalRecord(model);
+            return Created();
         }
 
-        [HttpPost("CreateMR")]
-        public async Task<IActionResult> Create([FromBody] MedicalRecordModel model)
+        [HttpDelete("Id", Name = "DeleteMedicalRecord")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteMedicalRecord(int id)
         {
-           await _medicalRecordManager.CreateMR(model);
-            return Ok();
+            await _medicalRecordManager.DeleteMedicalRecord(id);
+            return NoContent();
         }
 
-        [HttpDelete("DeleteMR")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost("Id", Name = "UpdateMedicalRecord")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateMedicalRecord(int id ,[FromBody] MedicalRecordModel model)
         {
-            await _medicalRecordManager.Delete(id);
-            return Ok();
+            await _medicalRecordManager.UpdateMedicalRecord(id,model);
+            return NoContent();
         }
 
-
-        [HttpPost("UpdateMR")]
-        public async Task<IActionResult> Update(int id ,[FromBody] MedicalRecordModel model)
+        [HttpGet("Id", Name = "GetMedicalRecordById")]
+        [ProducesResponseType(typeof(MedicalRecordResource), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetMedicalRecordById(int id)
         {
-            await _medicalRecordManager.Update(id,model);
-            return Ok();
+          var medicalRecord =  await _medicalRecordManager.GetMedicalRecordById(id);
+            return Ok(medicalRecord);
         }
 
-        [HttpGet("GetMRById")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("GetAllMedicalRecords")]
+        [ProducesResponseType(typeof(List<MedicalRecordResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllMedicalRecords()
         {
-          var MR=  await _medicalRecordManager.GetById(id);
-            return Ok(MR);
-        }
-
-        [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = _medicalRecordManager.GetAll();
-            return Ok(result);
+            var medicalRecords = _medicalRecordManager.GetAllMedicalRecords();
+            return Ok(medicalRecords);
         }
     }
 }

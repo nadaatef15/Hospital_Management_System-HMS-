@@ -10,10 +10,10 @@ namespace HMSContracts.CustomValidation
             // return base.IsValid(value, validationContext);
             var model = (AppointmentModel)validationContext.ObjectInstance;
 
-                if (model.EndTime <= model.SartTime)
-                {
-                    return new ValidationResult("EndTime must be after StartTime.");
-                }
+            if (model.EndTime < model.StartTime)
+            {
+                return new ValidationResult("EndTime must be after StartTime.");
+            }
 
             return ValidationResult.Success;
         }
