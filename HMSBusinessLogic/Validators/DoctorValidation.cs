@@ -27,6 +27,7 @@ namespace HMSBusinessLogic.Validators
       
         public async Task<bool> IsSpecialtyIdExist(int doctorSpecialtiesId , CancellationToken cancellationToken)=>
               await _dbContext.Specialties.AnyAsync(a=>a.Id==doctorSpecialtiesId);
+
         
     }
 }
