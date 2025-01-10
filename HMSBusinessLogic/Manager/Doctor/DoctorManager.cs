@@ -29,7 +29,7 @@ namespace HMSBusinessLogic.Manager.Doctor
     public class DoctorManager : IDoctorManager
     {
         private readonly UserManager<UserEntity> _userManagerIdentity;
-        private readonly IValidator<UserModel> _validator;
+        private readonly IValidator<DoctorModel> _validator;
         private readonly IFileService _fileService;
         private readonly IUserManager _userManager;
         private readonly IDoctorRepo _doctorRepo;
@@ -38,7 +38,7 @@ namespace HMSBusinessLogic.Manager.Doctor
         public DoctorManager(
             UserManager<UserEntity> userManagerIdentity,
             RoleManager<IdentityRole> roleManager,
-            IValidator<UserModel> validator, IFileService fileService,
+            IValidator<DoctorModel> validator, IFileService fileService,
             IUserManager userManager,
             IDoctorRepo doctorRepo,
             IDoctorSpecialtiesManager doctorSpecialtiesManager
@@ -75,24 +75,35 @@ namespace HMSBusinessLogic.Manager.Doctor
 
             await _userManagerIdentity.AddToRoleAsync(doctorEntity, SysConstants.Doctor);
 
-            return doctorEntity.ToResource();
+            doctorEntity.DoctorSpecialties = user.DoctorSpecialtiesIds
+                .Select(a => new DoctorSpecialties { SpecialtyId = a })
+                .ToList();
+
+            await _doctorRepo.SaveChangesAsync();
+            return (await _doctorRepo.GetDoctorByIdAsNoTracking(doctorEntity.Id))!.ToResource();
         }
 
-        public async Task UpdateDoctor(string dctorId, DoctorModel doctorModel)
+        public async Task UpdateDoctor(string dctorId, DoctorModel model)
         {
-            if (doctorModel.Id != dctorId)
+            if (model.Id != dctorId)
                 throw new ConflictException(NotTheSameId);
 
-            await _validator.ValidateAndThrowAsync(doctorModel);
+            await _validator.ValidateAndThrowAsync(model);
 
             var doctor = await _doctorRepo.GetDoctorById(dctorId) ??
                 throw new NotFoundException(UseDoesnotExist);
 
-            if (doctorModel.Image is not null)
-                doctor.ImagePath = await _fileService.UploadImage(doctorModel.Image);
+            if (model.Image is not null)
+                doctor.ImagePath = await _fileService.UploadImage(model.Image);
 
-            doctor.Salary = doctorModel.Salary;
-            await _userManager.UpdateUser(doctor, doctorModel);
+           
+            doctor.DoctorSpecialties = model.DoctorSpecialtiesIds
+               .Select(a => new DoctorSpecialties { SpecialtyId = a })
+               .ToList();
+
+            await _doctorRepo.SaveChangesAsync();
+
+            await _userManager.UpdateUser(doctor, model);
         }
 
         public async Task<DoctorResource> GetDoctorById(string id)

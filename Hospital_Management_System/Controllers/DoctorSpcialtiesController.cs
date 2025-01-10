@@ -1,4 +1,6 @@
 ﻿using HMSBusinessLogic.Manager.Doctor;
+using HMSBusinessLogic.Resource;
+using HMSContracts.Model.Specialty;
 using HMSDataAccess.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,24 +14,24 @@ namespace Hospital_Management_System.Controllers
             _doctorSpecialtiesManager = doctorSpecialtiesManager;
 
         [HttpPost(Name = "AddDoctorSpecialty")]
-        [ProducesResponseType(typeof(DoctorSpecialties),StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> AddDoctorSpecialty(DoctorSpecialties doctorSpecialties)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<IActionResult> AddDoctorSpecialty(DoctorSpecialtyModel doctorSpecialties)
         {
            await _doctorSpecialtiesManager.AddDoctorSpeciality(doctorSpecialties);
-            return Ok(); ;
+            return Created();
         }
 
         [HttpDelete(Name = "DeleteDoctorSpecialty")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteDoctorSpeciality(DoctorSpecialties doctorSpecialty)
+        public async Task<IActionResult> DeleteDoctorSpeciality(DoctorSpecialtyModel doctorSpecialty)
         {
             await _doctorSpecialtiesManager.DeleteDoctorSpecialty(doctorSpecialty);
             return NoContent(); 
         }
 
-        [HttpGet(Name ="DoctorHasSpecialty")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetDoctorSpecialty(string docId)
+        [HttpGet(Name ="DoctorHasSpecialties")]
+        [ProducesResponseType(typeof(List<DoctorSpecialtyResource>),StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDoctorSpecialties(string docId)
         {
            var docSpecialty= await _doctorSpecialtiesManager.GetDoctorSpecialties(docId);
             return Ok(docSpecialty);

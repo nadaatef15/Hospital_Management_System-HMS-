@@ -35,7 +35,9 @@ namespace HMSDataAccess.Repo.Doctor
                                 && ds.SpecialtyId == doctorSpecialty.SpecialtyId);
 
         public async Task<List<DoctorSpecialties>> GetDoctorSpecialties(string  doctorId)=>
-             await _dbContext.DoctorSpecialties.Where(a=>a.DoctorId == doctorId).ToListAsync();
+             await _dbContext.DoctorSpecialties
+             .Where(a=>a.DoctorId == doctorId)
+             .ToListAsync();
 
 
     }

@@ -15,11 +15,7 @@ namespace HMSBusinessLogic.Helpers.Mappers
             Age = user.Age,
             Address = user.Address,
             Gender = user.Gender == 'M' ? Gender.M : Gender.F,
-            Salary = user.Salary,
-            DoctorSpecialties = user.doctorSpecialitiesIds
-            .Select(a => new DoctorSpecialties { SpecialtyId = a })
-            .ToList()
-
+            Salary = user.Salary
         };
 
         public static DoctorResource ToResource(this DoctorEntity user) => new()
@@ -33,9 +29,7 @@ namespace HMSBusinessLogic.Helpers.Mappers
             Salary = user.Salary,
             Gender = user.Gender,
             Image = user.ImagePath,
-            DoctorSpecialities = user.DoctorSpecialties 
-            .Select(a => a.SpecialtyId)
-            .ToList()
+            DoctorSpecialties = user.DoctorSpecialties.Select(a => a.Specialty.ToResource()).ToList(),
         };
 
 

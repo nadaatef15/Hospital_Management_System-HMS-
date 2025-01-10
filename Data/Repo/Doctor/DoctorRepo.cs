@@ -9,7 +9,7 @@ namespace HMSDataAccess.Repo.Doctor
         Task<DoctorEntity?> GetDoctorById(string id);
         Task<List<DoctorEntity>> GetAllDoctors();
         Task<DoctorEntity?> GetDoctorByIdAsNoTracking(string id);
-
+        Task SaveChangesAsync();
         Task AddDoctor(DoctorEntity entity);
     }
     public class DoctorRepo : IDoctorRepo
@@ -20,21 +20,30 @@ namespace HMSDataAccess.Repo.Doctor
             _dbContext = context;
         }
 
-       public async Task AddDoctor(DoctorEntity entity)
+        public async Task AddDoctor(DoctorEntity entity)
         {
             _dbContext.Add(entity);
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task SaveChangesAsync() =>
+            await _dbContext.SaveChangesAsync();
+
         public async Task<DoctorEntity?> GetDoctorById(string id) =>
              await _dbContext.Doctors.FindAsync(id);
 
         public async Task<DoctorEntity?> GetDoctorByIdAsNoTracking(string id) =>
-             await _dbContext.Doctors.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
+             await _dbContext.Doctors
+                    .Include(a => a.DoctorSpecialties)
+                    .ThenInclude(a => a.Specialty)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(a => a.Id == id);
 
-        public async Task<List<DoctorEntity>> GetAllDoctors()=>
-             await _dbContext.Doctors.AsNoTracking().ToListAsync();
-          
-
+        public async Task<List<DoctorEntity>> GetAllDoctors() =>
+                     await _dbContext.Doctors
+                    .Include(a => a.DoctorSpecialties)
+                    .ThenInclude(a => a.Specialty)
+                    .AsNoTracking()
+                    .ToListAsync();
     }
 }

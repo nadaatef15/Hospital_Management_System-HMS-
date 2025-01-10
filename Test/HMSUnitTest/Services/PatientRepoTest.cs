@@ -106,7 +106,7 @@ namespace HMSUnitTest.Services
             
 
             List<PatientEntity> patients = new List<PatientEntity>();
-
+            
                 var repo = new PatientRepo(context);
                 patients = await repo.GetAllPatients();
             

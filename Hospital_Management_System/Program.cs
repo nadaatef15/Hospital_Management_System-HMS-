@@ -24,6 +24,7 @@ using HMSContracts.Model.Appointment;
 using HMSContracts.Model.Identity;
 using HMSContracts.Model.MedicalRecord;
 using HMSContracts.Model.Specialty;
+using HMSContracts.Model.Users;
 using HMSDataAccess.DBContext;
 using HMSDataAccess.Entity;
 using HMSDataAccess.Repo.Appointment;
@@ -78,7 +79,16 @@ namespace Hospital_Management_System
             builder.Services.AuthenticationService(builder.Configuration);
             builder.Services.SwaggerConfiguration();
             builder.Services.AddLocalization();
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("myPolicy", policy =>
+                {
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyOrigin();
+                    policy.AllowAnyHeader();
+                    
+                });
+            });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -118,7 +128,8 @@ namespace Hospital_Management_System
             builder.Services.AddScoped<IValidator<MedicalRecordModel>, MedicalRecordValidator>();
             builder.Services.AddScoped<IValidator<AppointmentModel>, AppointmentValidator>();
             builder.Services.AddScoped<IValidator<SpecialtyModel>, SpecialtyValidation>();
-            builder.Services.AddScoped<IValidator<DoctorSpecialties>, DoctorSpecialtyValidation>();
+            builder.Services.AddScoped<IValidator<DoctorSpecialtyModel>, DoctorSpecialtyValidation>();
+            builder.Services.AddScoped<IValidator<DoctorModel>, DoctorValidation>();
 
 
 
@@ -145,7 +156,8 @@ namespace Hospital_Management_System
                 app.UseSwaggerUI();
             }
 
-          //  app.UseMiddleware<ExceptionHandlingMiddleware>();
+            //  app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseCors("myPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

@@ -11,8 +11,9 @@ namespace HMSBusinessLogic.Helpers.Mappers
             Name = model.Name,
         };
 
-        public static SpecialtyResource ToResource (this SpecialtyEntity entity) => new()
+        public static SpecialtyResource ToResource(this SpecialtyEntity entity) => new()
         {
+            Id = entity.Id,
             Name = entity.Name,
         };
     }

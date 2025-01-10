@@ -22,6 +22,6 @@ namespace HMSBusinessLogic.Resource
         public string Address { get; set; }
 
         public string Image { get; set; }
-        public List<int> DoctorSpecialities { get; set; } = new List<int>();
+        public List<SpecialtyResource> DoctorSpecialties { get; set; } = new List<SpecialtyResource>();
     }
 }
